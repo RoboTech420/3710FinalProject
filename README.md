@@ -26,14 +26,14 @@ this can be in the parent directory where both the folders are located.
 
 for windows create a batch file(.bat) 
 and copy
-<foldername>\Scripts\activate
+```foldername\Scripts\activate```
 name it venv.bat
 and run it on command prompt(not powershell) by simply typing in <b>v</b>
 
 for linux create a shell script(.sh)
 and copy
 
-source <foldername>/Scripts/activate
+```source foldername/Scripts/activate```
 
   
 name it venv.sh
