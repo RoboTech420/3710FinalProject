@@ -7,19 +7,19 @@ UofW Artificial Intelligence
 
 execute the following commands
 
-pip install virtualenv
+```pip install virtualenv```
 
-python -m venv <foldername>
+```python -m venv <foldername>```
 (the new folder created will contain all the libraries)
 
 
 # Clone the repository
 
-git clone https://github.com/RoboTech420/3710FinalProject
+```git clone https://github.com/RoboTech420/3710FinalProject```
 
-cd 3710FinalProject
+```cd 3710FinalProject```
 
-pip install -r requirements.txt
+```pip install -r requirements.txt```
 
 to activate the virtual environment (<b>important step</b>) 
 this can be in the parent directory where both the folders are located.
