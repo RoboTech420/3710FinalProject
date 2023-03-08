@@ -28,7 +28,7 @@ for windows create a batch file(.bat)
 and copy
 ```foldername\Scripts\activate```
 name it venv.bat
-and run it on command prompt(not powershell) by simply typing in <b>v</b>
+and run it on command prompt(not powershell) by simply typing in <b>venv</b>
 
 for linux create a shell script(.sh)
 and copy
