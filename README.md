@@ -3,18 +3,17 @@
 
 UofW Artificial Intelligence 
 
-#to get started
+# To get started
 
-
-
-create a virtual enviroment by using the following commands
+execute the following commands
 
 pip install virtualenv
 
 python -m venv <foldername>
 (the new folder created will contain all the libraries)
 
-Clone the repository
+
+# Clone the repository
 
 git clone https://github.com/RoboTech420/3710FinalProject
 
