@@ -38,11 +38,11 @@ print(datasetName)
 '''
 
 #Read dataset from file
-'''
+
 dataFrame = pd.read_csv("DataSets\Diabetes\diabetic_data.csv")
 print(dataFrame.head(20))
-print(len(dataFrame) * traingingSize)
-'''
+print(len(dataFrame) * trainingSize)
+
 
 #Reads Two Columns into x, y and merges them together 
 '''
