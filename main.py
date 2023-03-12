@@ -38,11 +38,22 @@ print(datasetName)
 '''
 
 #Read dataset from file
-
 dataFrame = pd.read_csv("DataSets\Diabetes\diabetic_data.csv")
 print(dataFrame.head(20))
-print(len(dataFrame) * trainingSize)
+trainingData = len(dataFrame) * trainingSize
 
+# Check column contains Particular value of DataFrame by Pandas.Series.isin()
+newData = dataFrame['readmitted'].isin(['NO']).head(20)
+print(newData)
+
+#Plotting ALL data, re-opened the csv
+plt.rcParams["figure.figsize"] = [7.00, 3.50]
+plt.rcParams["figure.autolayout"] = True
+columns = ["race", "readmitted"]
+df = pd.read_csv("DataSets\Diabetes\diabetic_data.csv", usecols=columns)
+print("Contents in csv file:", df)
+plt.plot(df.race, df.readmitted)
+plt.show()
 
 #Reads Two Columns into x, y and merges them together 
 '''
