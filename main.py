@@ -1,7 +1,6 @@
 # MODULES
 import urllib.request
 import pandas as pd
-from convertData import renameData
 import matplotlib.pyplot as plt
 from sklearn import linear_model
 
@@ -27,7 +26,7 @@ url="https://archive.ics.uci.edu/ml/machine-learning-databases/mushroom/agaricus
 urlData=pd.read_csv(url, header=None)
 #print(urlData)
 #parseData(urlData)
-renameData(urlData)
+
 '''
 
 #Reading data names STILL NEEDS TO BE PARSED
@@ -46,6 +45,7 @@ trainingData = len(dataFrame) * trainingSize
 newData = dataFrame['readmitted'].isin(['NO']).head(20)
 print(newData)
 
+
 #Plotting ALL data, re-opened the csv
 plt.rcParams["figure.figsize"] = [7.00, 3.50]
 plt.rcParams["figure.autolayout"] = True
@@ -54,6 +54,12 @@ df = pd.read_csv("DataSets\Diabetes\diabetic_data.csv", usecols=columns)
 print("Contents in csv file:", df)
 plt.plot(df.race, df.readmitted)
 plt.show()
+
+# This prints only the female genders and cauacsian
+female_df = dataFrame[(dataFrame['gender'] == 'Female') & (dataFrame['race'] == 'Caucasian')]
+print(female_df)
+
+
 
 #Reads Two Columns into x, y and merges them together 
 '''
