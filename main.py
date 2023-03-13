@@ -60,7 +60,7 @@ female_df = dataFrame[(dataFrame['gender'] == 'Female') & (dataFrame['race'] == 
 print(female_df)
 
 
-
+print('Hi')
 #Reads Two Columns into x, y and merges them together 
 '''
 x = dataFrame["encounter_id"]
