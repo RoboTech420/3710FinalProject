@@ -1,0 +1,7 @@
+play wiht hyper par to play with prediction
+
+Kernels talk about for project, ex. for SVMs slide Learning7-2.pptx slide 78
+use python module for this sklearn is good 
+    -Polynomial
+    -Gaussian
+    -Sigmoid

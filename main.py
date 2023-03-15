@@ -47,6 +47,7 @@ print(newData)
 
 
 #Plotting ALL data, re-opened the csv
+
 plt.rcParams["figure.figsize"] = [7.00, 3.50]
 plt.rcParams["figure.autolayout"] = True
 columns = ["race", "readmitted"]
@@ -55,12 +56,14 @@ print("Contents in csv file:", df)
 plt.plot(df.race, df.readmitted)
 plt.show()
 
+
 # This prints only the female genders and cauacsian
 female_df = dataFrame[(dataFrame['gender'] == 'Female') & (dataFrame['race'] == 'Caucasian')]
 print(female_df)
 
 
 print('Hi')
+print(dataFrame.shape)
 #Reads Two Columns into x, y and merges them together 
 '''
 x = dataFrame["encounter_id"]
