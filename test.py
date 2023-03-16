@@ -4,43 +4,44 @@ from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 import numpy as np
-import re
+from sklearn.preprocessing import OneHotEncoder
 
 # load data
 df = pd.read_csv('DataSets\Diabetes\diabetic_data.csv')
 
 # create DataFrame
-df = pd.DataFrame(df['age'])
-
-# define regular expression pattern for age range lower and upper bound
-pattern = r'\[(\d+)\-(\d+)\)'
+df = pd.DataFrame(df)
 
 # extract lower and upper bounds using regular expression
-df['lower_bound'] = df['age'].str.strip('[]').str.split('-', expand=True)[0].astype(int)
-df['upper_bound'] = df['age'].str.strip('[]').str.split('-', expand=True)[1].str.rstrip(')').astype(int)
-
-# extract lower and upper bounds using regular expression
-match = re.search(pattern, df['age'][0])
-lower_bound = int(match.group(1))
-upper_bound = int(match.group(2))
-
-# print results
-print(df)
-print('Lower Bound:', lower_bound)
-print('Upper Bound:', upper_bound)
+df['age_lower_bound'] = df['age'].str.strip('[]').str.split('-', expand=True)[0].astype(int)
+df['age_upper_bound'] = df['age'].str.strip('[]').str.split('-', expand=True)[1].str.rstrip(')').astype(int)
 
 # drop columns that are not relevant to the analysis
-df.drop(['age'], axis=1, inplace=True)
+df.drop(['diag_1','diag_2','diag_3','weight', 'age', 'medical_specialty', 'payer_code', 'encounter_id','patient_nbr', 'admission_type_id', 'discharge_disposition_id','admission_source_id'], axis=1, inplace=True)
+
+# replace '?' with 'Other' in the 'profession' column
+df['race'] = df['race'].replace('?', 'Other')
+
 
 print(df)
+
+# print the columns
+for coloumn in df.columns:
+    print(coloumn)
+    print(df[coloumn].value_counts())
+
+# get the count of the number of columns
+num_columns = df.shape[1]
+print("Num coloumns: "+str(num_columns))
+
+print(df['race'].value_counts())
+
+for coloumn in df.columns:
+    print(coloumn)
 
 '''
 # replace '?' with NaN
 df = df.replace('?', np.nan)
-
-# Create new columns for lower and upper bounds
-df['lower_bound'] = df['age'].str.split('-', expand=True)[0].astype(int)
-df['upper_bound'] = df['age'].str.split('-', expand=True)[1].str.replace(')', '').astype(int)
 
 # drop rows with missing or invalid values
 df.dropna(inplace=True)
