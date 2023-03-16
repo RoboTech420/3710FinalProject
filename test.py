@@ -5,6 +5,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 import numpy as np
 from sklearn.preprocessing import OneHotEncoder
+from sklearn.preprocessing import LabelEncoder
 
 # load data
 df = pd.read_csv('DataSets\Diabetes\diabetic_data.csv')
@@ -38,6 +39,23 @@ print(df['race'].value_counts())
 
 for coloumn in df.columns:
     print(coloumn)
+
+
+col = df['race']
+# Instantiate the LabelEncoder
+le = LabelEncoder()
+
+# Fit the LabelEncoder to the data
+le.fit(col)
+
+# Transform the data to numerical form
+data_encoded = le.transform(col)
+print(data_encoded)
+
+# Decode the numerical data back to its original form
+data_decoded = le.inverse_transform(data_encoded)
+print(data_decoded)
+
 
 '''
 # replace '?' with NaN

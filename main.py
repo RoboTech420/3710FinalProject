@@ -33,7 +33,7 @@ df['age_upper_bound'] = df['age'].str.strip('[]').str.split('-', expand=True)[1]
 # drop columns that are not relevant to the analysis
 df.drop(['diag_1','diag_2','diag_3','weight', 'age', 'medical_specialty', 'payer_code', 'encounter_id','patient_nbr', 'admission_type_id', 'discharge_disposition_id','admission_source_id'], axis=1, inplace=True)
 
-# replace '?' with 'Other' in the 'profession' column
+# replace '?' with 'Other' in the 'race' column
 df['race'] = df['race'].replace('?', 'Other')
 
 
@@ -53,6 +53,9 @@ print(df['race'].value_counts())
 for coloumn in df.columns:
     print(coloumn)
 
+
+print(df['num_procedures'].value_counts())
+print(df['insulin'].value_counts())
 
 # Check column contains Particular value of DataFrame by Pandas.Series.isin()
 '''
