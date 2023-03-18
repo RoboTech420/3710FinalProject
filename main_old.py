@@ -51,6 +51,63 @@ for column in df.columns:
 
 print(df)
 
+# get the count of the number of columns
+num_columns = df.shape[1]
+print("Num coloumns: "+str(num_columns))
+
+print(df['race'].value_counts())
+
+for coloumn in df.columns:
+    print(coloumn)
+
+
+print(df['num_procedures'].value_counts())
+print(df['insulin'].value_counts())
+
+# Check column contains Particular value of DataFrame by Pandas.Series.isin()
+'''
+newData = df['readmitted'].isin(['NO']).head(20)
+print(newData)
+'''
+
+print(df.shape)
+print(df.dtypes)
+print(df.info())
+
 # Displays the heat map of the data
 sns.heatmap(df.corr(numeric_only=True))
 plt.show()
+
+# Instantiate the LabelEncoder
+le = LabelEncoder()
+
+# Fit the LabelEncoder to the data
+le.fit(df['race'])
+
+# Transform the data to numerical form
+data_encoded = le.transform(df['race'])
+print(data_encoded)
+
+# Decode the numerical data back to its original form
+data_decoded = le.inverse_transform(data_encoded)
+print(data_decoded)
+print(le)
+
+#Plotting ALL data, re-opened the csv
+'''
+plt.rcParams["figure.figsize"] = [7.00, 3.50]
+plt.rcParams["figure.autolayout"] = True
+columns = ["race", "readmitted"]
+df = pd.read_csv("DataSets\Diabetes\diabetic_data.csv", usecols=columns)
+print("Contents in csv file:", df)
+plt.plot(df.race, df.readmitted)
+plt.show()
+'''
+
+#Reads Two Columns into x, y and merges them together 
+'''
+x = dataFrame["encounter_id"]
+y = dataFrame["time_in_hospital"]
+df = pd.merge(x,y, right_index=True, left_index=True)
+print(df)
+'''
