@@ -3,6 +3,8 @@ import urllib.request
 import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn import linear_model
+from sklearn.preprocessing import LabelEncoder
+import seaborn as sns
 
 # FUNCTIONS
 def parseData(urlData):
@@ -16,6 +18,13 @@ def plotLinear(x, xLab, y, yLab):
 	plt.show() 
 	return
 
+def printColumns(df):
+     # print the columns
+	for coloumn in df.columns:
+		print(coloumn)
+		print(df[coloumn].value_counts())
+	return
+
 # VARIABLES
 trainingSize = 0.75
 dataSize = 1.00 - trainingSize #just need to adjust line above
@@ -26,23 +35,21 @@ df = pd.read_csv('DataSets\Diabetes\diabetic_data.csv')
 # create DataFrame
 df = pd.DataFrame(df)
 
-# extract lower and upper bounds using regular expression
-df['age_lower_bound'] = df['age'].str.strip('[]').str.split('-', expand=True)[0].astype(int)
-df['age_upper_bound'] = df['age'].str.strip('[]').str.split('-', expand=True)[1].str.rstrip(')').astype(int)
-
 # drop columns that are not relevant to the analysis
-df.drop(['diag_1','diag_2','diag_3','weight', 'age', 'medical_specialty', 'payer_code', 'encounter_id','patient_nbr', 'admission_type_id', 'discharge_disposition_id','admission_source_id'], axis=1, inplace=True)
+df.drop(['diag_1','diag_2','diag_3','weight', 'medical_specialty', 'payer_code', 'encounter_id','patient_nbr', 'admission_type_id', 'discharge_disposition_id','admission_source_id'], axis=1, inplace=True)
 
 # replace '?' with 'Other' in the 'race' column
 df['race'] = df['race'].replace('?', 'Other')
 
+# Create an instance of the LabelEncoder
+label_encoder = LabelEncoder()
+
+# Iterate over each categorical variable and encode its values
+for column in df.columns:
+    if df[column].dtype == 'object':
+        df[column] = label_encoder.fit_transform(df[column])
 
 print(df)
-
-# print the columns
-for coloumn in df.columns:
-    print(coloumn)
-    print(df[coloumn].value_counts())
 
 # get the count of the number of columns
 num_columns = df.shape[1]
@@ -64,6 +71,27 @@ print(newData)
 '''
 
 print(df.shape)
+print(df.dtypes)
+print(df.info())
+
+# Displays the heat map of the data
+sns.heatmap(df.corr(numeric_only=True))
+plt.show()
+
+# Instantiate the LabelEncoder
+le = LabelEncoder()
+
+# Fit the LabelEncoder to the data
+le.fit(df['race'])
+
+# Transform the data to numerical form
+data_encoded = le.transform(df['race'])
+print(data_encoded)
+
+# Decode the numerical data back to its original form
+data_decoded = le.inverse_transform(data_encoded)
+print(data_decoded)
+print(le)
 
 #Plotting ALL data, re-opened the csv
 '''

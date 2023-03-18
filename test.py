@@ -40,7 +40,22 @@ print(df['race'].value_counts())
 for coloumn in df.columns:
     print(coloumn)
 
+print(df)
 
+# Create an instance of the LabelEncoder
+label_encoder = LabelEncoder()
+
+# Iterate over each categorical variable and encode its values
+for column in df.columns:
+    if df[column].dtype == 'object':
+        df[column] = label_encoder.fit_transform(df[column])
+
+
+
+print(df)
+
+# possible lable encoder
+'''
 col = df['race']
 # Instantiate the LabelEncoder
 le = LabelEncoder()
@@ -55,7 +70,7 @@ print(data_encoded)
 # Decode the numerical data back to its original form
 data_decoded = le.inverse_transform(data_encoded)
 print(data_decoded)
-
+'''
 
 '''
 # replace '?' with NaN
