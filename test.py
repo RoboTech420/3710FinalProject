@@ -6,16 +6,13 @@ from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_sc
 import numpy as np
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.preprocessing import LabelEncoder
+import matplotlib.pyplot as plt
 
 # load data
 df = pd.read_csv('DataSets\Diabetes\diabetic_data.csv')
 
 # create DataFrame
 df = pd.DataFrame(df)
-
-# extract lower and upper bounds using regular expression
-df['age_lower_bound'] = df['age'].str.strip('[]').str.split('-', expand=True)[0].astype(int)
-df['age_upper_bound'] = df['age'].str.strip('[]').str.split('-', expand=True)[1].str.rstrip(')').astype(int)
 
 # drop columns that are not relevant to the analysis
 df.drop(['diag_1','diag_2','diag_3','weight', 'age', 'medical_specialty', 'payer_code', 'encounter_id','patient_nbr', 'admission_type_id', 'discharge_disposition_id','admission_source_id'], axis=1, inplace=True)
@@ -24,12 +21,10 @@ df.drop(['diag_1','diag_2','diag_3','weight', 'age', 'medical_specialty', 'payer
 df['race'] = df['race'].replace('?', 'Other')
 
 
-print(df)
-
 # print the columns
-for coloumn in df.columns:
-    print(coloumn)
-    print(df[coloumn].value_counts())
+for column in df.columns:
+    print(column)
+    print(df[column].value_counts())
 
 # get the count of the number of columns
 num_columns = df.shape[1]
@@ -37,22 +32,52 @@ print("Num coloumns: "+str(num_columns))
 
 print(df['race'].value_counts())
 
-for coloumn in df.columns:
-    print(coloumn)
+for column in df.columns:
+    print(column)
 
-print(df)
 
-# Create an instance of the LabelEncoder
-label_encoder = LabelEncoder()
-
-# Iterate over each categorical variable and encode its values
+# Create a LabelEncoder object for each column and fit them on the respective column
+label_encoders = {}
 for column in df.columns:
     if df[column].dtype == 'object':
-        df[column] = label_encoder.fit_transform(df[column])
+        label_encoders[column] = LabelEncoder()
+        label_encoders[column].fit(df[column])
 
-
-
+# Encode the values in each column and print the DataFrame with the encoded values
+for column, encoder in label_encoders.items():
+    df[column] = encoder.transform(df[column])
+    
+# Decode the encoded values in each column and print the DataFrame with the decoded values
+for column, encoder in label_encoders.items():
+    df[column] = encoder.inverse_transform(df[column])
+    
+print("\nDecoded DataFrame:")
 print(df)
+print(len(label_encoders))
+
+print("Encoded DataFrame:")
+print(df)
+plt.hist(df['race'])
+plt.title('Patient Race Distribution')
+plt.xlabel('Race')
+plt.ylabel('Count')
+plt.show()
+
+plt.scatter(df['time_in_hospital'], df['num_medications'])
+plt.title('Time in Hospital vs Number of Medications')
+plt.xlabel('Time in Hospital')
+plt.ylabel('Number of Medications')
+plt.show()
+
+'''
+# Decode the encoded values in each column and print the DataFrame with the decoded values
+for column, encoder in label_encoders.items():
+    if df[column].dtype == 'object':
+        df[column + '_Decoded'] = encoder.inverse_transform(df[column + '_Encoded'])
+print("\nDecoded DataFrame:")
+print(df)
+'''
+
 
 # possible lable encoder
 '''
@@ -102,3 +127,4 @@ model.fit(X_train, y_train)
 y_pred = model.predict(X_test)
 print("Accuracy:", accuracy_score(y_test, y_pred))
 '''
+
