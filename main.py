@@ -6,22 +6,17 @@ from sklearn import linear_model
 from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import train_test_split
 from sklearn.tree import DecisionTreeClassifier
+from sklearn.naive_bayes import GaussianNB # 1. choose model class
 from sklearn.metrics import accuracy_score
 import seaborn as sns
+import ReadDataset
+import OurGraphs
 
 
 # VARIABLES
 testSize = 0.25
 
 # FUNCTIONS
-# just a random print function for now
-def plotLinear(x, xLab, y, yLab):
-	plt.plot(x, y)
-	plt.xlabel(xLab)
-	plt.ylabel(yLab)
-	plt.show() 
-	return
-
 # prints the columns
 def printColumns(df):
      # print the columns
@@ -42,55 +37,40 @@ def decisionTree(df, col):
 	print(f'Accuracy : {accuracy} {col}')
 	return
 
-# load data
-df = pd.read_csv('DataSets\Diabetes\diabetic_data.csv')
+#MAIN
 
-# create DataFrame
-df = pd.DataFrame(df)
+df = ReadDataset.load_data()
 
-# drop columns that are not relevant to the analysis
-df.drop(['diag_1','diag_2','diag_3','weight', 'medical_specialty', 'payer_code', 'encounter_id','patient_nbr', 'admission_type_id', 'discharge_disposition_id','admission_source_id'], axis=1, inplace=True)
-
-# replace '?' with 'Other' in the 'race' column
-df['race'] = df['race'].replace('?', 'Other')
-
+#ENCODES DATASET
 # Create a LabelEncoder object for each column and fit them on the respective column
 label_encoders = {}
 for column in df.columns:
     if df[column].dtype == 'object':
         label_encoders[column] = LabelEncoder()
         label_encoders[column].fit(df[column])
-
 # Encode the values in each column and print the DataFrame with the encoded values
 for column, encoder in label_encoders.items():
     df[column] = encoder.transform(df[column])
     
 print(df)
 
+
+#for column in df.columns:
+	#decisionTree(df, column)
+
+X_set = df[['race','num_procedures','num_lab_procedures']]
+Y_set = df['diabetesMed']
+
+Xtrain, Xtest, ytrain, ytest = train_test_split(X_set, Y_set, random_state=1)
+model = GaussianNB()                       # 2. instantiate model
+model.fit(Xtrain, ytrain)                  # 3. fit model to data
+y_model = model.predict(Xtest)             # 4. predict on new data
+print(accuracy_score(ytest, y_model))
+
+
+#DECODES DATASET
 # Decode the encoded values in each column and print the DataFrame with the decoded values
 for column, encoder in label_encoders.items():
     df[column] = encoder.inverse_transform(df[column])
     
-
-
-# Displays the heat map of the data
-sns.heatmap(df.corr(numeric_only=True))
-plt.show()
-
-# Race Graph vs Count of Patients
-plt.hist(df['race'])
-plt.title('Patient Race Distribution')
-plt.xlabel('Race')
-plt.ylabel('Count')
-plt.show()
-
 print(df)
-
-
-#sns.lineplot(df)
-#plt.show()
-
-#for column in df.columns:
-	#decisionTree(df, column)
-	
-
