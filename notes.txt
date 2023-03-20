@@ -1,3 +1,5 @@
+Diabetic dataset came from URL: https://archive.ics.uci.edu/ml/datasets/Diabetes+130-US+hospitals+for+years+1999-2008
+
 play wiht hyper par to play with prediction
 
 Kernels talk about for project, ex. for SVMs slide Learning7-2.pptx slide 78
