@@ -65,6 +65,8 @@ print(df)
 X_set = df[['race','num_procedures','num_lab_procedures']]
 Y_set = df['diabetesMed']
 
+print(Y_set.value_counts())
+OurGraphs.racemap(df)
 # GAUSSIAN
 # Use the Gaussian Naive Bayes algorithm to classify data into two classes (i.e., binary classification).
 # It splits the dataset into training and testing sets using train_test_split function from scikit-learn,
@@ -77,13 +79,14 @@ y_model = model.predict(Xtest)             # 4. predict on new data
 print(accuracy_score(ytest, y_model))
 
 # DECISION TREE
-'''
+
 for column in df.columns:
 	decisionTree(df, column)
-'''
+
+
 
 # CROSS-VALIDATION
-# We're using logistic regression as the model to evaluate, but you can use any other model as per your requirements.
+# We are using logistic regression as the model to evaluate, but you can use any other model as per your requirements.
 # The cross_val_score function will return an array of accuracy scores for each fold. You can then compute the mean and
 # standard deviation of the scores to get an estimate of the model's accuracy on unseen data. 
 # Define the number of folds
