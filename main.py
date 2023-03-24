@@ -11,6 +11,7 @@ from sklearn.model_selection import cross_val_score
 from sklearn.model_selection import KFold
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score
+from sklearn.model_selection import RandomizedSearchCV
 import seaborn as sns
 import ReadDataset
 import OurGraphs
@@ -36,7 +37,7 @@ def decisionTree(df, col):
 	X = df.drop(col, axis=1)
 	y = df[col]
 	X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=testSize, random_state=42)
-	clf = DecisionTreeClassifier(random_state=42)
+	clf = DecisionTreeClassifier(max_depth=10, random_state=42)
 	clf.fit(X_train, y_train)
 	y_pred = clf.predict(X_test)
 	accuracy = accuracy_score(y_test, y_pred)
@@ -84,7 +85,6 @@ for column in df.columns:
 	decisionTree(df, column)
 
 
-
 # CROSS-VALIDATION
 # We are using logistic regression as the model to evaluate, but you can use any other model as per your requirements.
 # The cross_val_score function will return an array of accuracy scores for each fold. You can then compute the mean and
@@ -101,6 +101,25 @@ scores = cross_val_score(model, X_set, Y_set, cv=cv)
 print("Scores: ", scores)
 print("Mean Accuracy:", scores.mean())
 print("Standard Deviation:", scores.std())
+
+print("Hyperparameter Tuning: ")
+
+params = {
+    'penalty': ['l1', 'l2', 'elasticnet'],
+    'C': [0.001, 0.01, 0.1, 1, 10, 100],
+    'fit_intercept': [True, False],
+    'class_weight': [None, 'balanced'],
+    'solver': ['newton-cg', 'lbfgs', 'liblinear', 'sag', 'saga'],
+    'max_iter': [100, 500, 1000, 5000]
+}
+cv = KFold(n_splits=k, shuffle=True, random_state=42)
+model = LogisticRegression()
+random_search = RandomizedSearchCV(model, param_distributions=params, cv=cv, n_iter=100, n_jobs=-1, random_state=42)
+random_search.fit(X_set, Y_set)
+print('Best parameters:', random_search.best_params_)
+print('Best score:', random_search.best_score_)
+
+
 
 
 #DECODES DATASET
