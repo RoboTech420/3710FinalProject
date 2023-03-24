@@ -65,7 +65,10 @@ print(df)
 X_set = df[['race','num_procedures','num_lab_procedures']]
 Y_set = df['diabetesMed']
 
+# Prints the value counts
 print(Y_set.value_counts())
+
+
 OurGraphs.racemap(df)
 # GAUSSIAN
 # Use the Gaussian Naive Bayes algorithm to classify data into two classes (i.e., binary classification).
