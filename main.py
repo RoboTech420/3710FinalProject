@@ -11,6 +11,7 @@ from sklearn.model_selection import cross_val_score
 from sklearn.model_selection import KFold
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score
+from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import RandomizedSearchCV
 import seaborn as sns
 import ReadDataset
@@ -29,26 +30,12 @@ def printColumns(df):
 		print(df[coloumn].value_counts())
 	return
 
-# Decision Tree
-# Implements a decision tree classifier on a given dataset and target column. It then splits the dataset into training and
-# testing sets, fits the classifier on the training data, and evaluates its performance on the testing data using the accuracy
-# score. Finally, it prints the accuracy score and the target column for reference.
-def decisionTree(df, col):
-	X = df.drop(col, axis=1)
-	y = df[col]
-	X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=testSize, random_state=42)
-	clf = DecisionTreeClassifier(max_depth=10, random_state=42)
-	clf.fit(X_train, y_train)
-	y_pred = clf.predict(X_test)
-	accuracy = accuracy_score(y_test, y_pred)
-	print(f'Accuracy : {accuracy} {col}')
-	return
+# MAIN
 
-#MAIN
-
+# LOAD THE DATA
 df = ReadDataset.load_data()
 
-#ENCODES DATASET
+# ENCODES DATASET
 # Create a LabelEncoder object for each column and fit them on the respective column
 label_encoders = {}
 for column in df.columns:
@@ -58,34 +45,42 @@ for column in df.columns:
 # Encode the values in each column and print the DataFrame with the encoded values
 for column, encoder in label_encoders.items():
     df[column] = encoder.transform(df[column])
-# prints the dataframe    
-print(df)
 
 
+# Select the coloumn we want to train for
+X_set = df.drop(['readmitted'], axis=1)
+Y_set = df['readmitted']
+#Splits the dataset into training and testing sets using train_test_split function from scikit-learn
+X_train, X_test, y_train, y_test = train_test_split(X_set, Y_set, random_state=1)
 
-X_set = df[['race','num_procedures','num_lab_procedures']]
-Y_set = df['diabetesMed']
+# Create a StandardScaler object to scale the input features
+scaler = StandardScaler()
+
+# Fit the scaler on the training set and transform both the training and test sets
+X_train_scaled = scaler.fit_transform(X_train)
+X_test_scaled = scaler.transform(X_test)
+
 
 # Prints the value counts
 print(Y_set.value_counts())
-
-
-OurGraphs.racemap(df)
 # GAUSSIAN
 # Use the Gaussian Naive Bayes algorithm to classify data into two classes (i.e., binary classification).
-# It splits the dataset into training and testing sets using train_test_split function from scikit-learn,
 # then fits a GaussianNB model on the training data, predicts the class labels of the testing data using the predict method,
 # and finally calculates the accuracy score of the predicted labels using the accuracy_score function from scikit-learn.
-Xtrain, Xtest, ytrain, ytest = train_test_split(X_set, Y_set, random_state=1)
 model = GaussianNB()                       # 2. instantiate model
-model.fit(Xtrain, ytrain)                  # 3. fit model to data
-y_model = model.predict(Xtest)             # 4. predict on new data
-print(accuracy_score(ytest, y_model))
+model.fit(X_train_scaled, y_train)                  # 3. fit model to data
+y_model = model.predict(X_test_scaled )             # 4. predict on new data
+print(accuracy_score(y_test, y_model))
 
 # DECISION TREE
-
-for column in df.columns:
-	decisionTree(df, column)
+# Implements a decision tree classifier on a given dataset and target column. It then splits the dataset into training and
+# testing sets, fits the classifier on the training data, and evaluates its performance on the testing data using the accuracy
+# score. Finally, it prints the accuracy score and the target column for reference.
+clf = DecisionTreeClassifier(max_depth=5, random_state=42)
+clf.fit(X_train_scaled, y_train)
+y_pred = clf.predict(X_test_scaled )
+accuracy = accuracy_score(y_test, y_pred)
+print(f'Decision Tree Accuracy : {accuracy}')
 
 
 # CROSS-VALIDATION
@@ -93,20 +88,22 @@ for column in df.columns:
 # The cross_val_score function will return an array of accuracy scores for each fold. You can then compute the mean and
 # standard deviation of the scores to get an estimate of the model's accuracy on unseen data. 
 # Define the number of folds
-k = 10
+k = 2
 # Create a cross-validation object using KFold
 cv = KFold(n_splits=k, shuffle=True, random_state=42)
 # Create the model you want to evaluate
-model = LogisticRegression()
+model = LogisticRegression(max_iter=5000)
 # Evaluate the model using cross_val_score
-scores = cross_val_score(model, X_set, Y_set, cv=cv)
+scores = cross_val_score(model, X_train_scaled, y_train, cv=cv)
 # Print the scores
 print("Scores: ", scores)
 print("Mean Accuracy:", scores.mean())
 print("Standard Deviation:", scores.std())
 
-print("Hyperparameter Tuning: ")
 
+# HYPERPARAMETER TUNING
+
+print("Hyperparameter Tuning: ")
 params = {
     'penalty': ['l1', 'l2', 'elasticnet'],
     'C': [0.001, 0.01, 0.1, 1, 10, 100],
@@ -118,16 +115,15 @@ params = {
 cv = KFold(n_splits=k, shuffle=True, random_state=42)
 model = LogisticRegression()
 random_search = RandomizedSearchCV(model, param_distributions=params, cv=cv, n_iter=100, n_jobs=-1, random_state=42)
-random_search.fit(X_set, Y_set)
+random_search.fit(X_train_scaled, y_train)
 print('Best parameters:', random_search.best_params_)
 print('Best score:', random_search.best_score_)
-
-
 
 
 #DECODES DATASET
 # Decode the encoded values in each column and print the DataFrame with the decoded values
 for column, encoder in label_encoders.items():
     df[column] = encoder.inverse_transform(df[column])
-# prints the dataframe    
-print(df)
+
+# GRAPHS
+#OurGraphs.racemap(df)

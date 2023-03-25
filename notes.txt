@@ -7,3 +7,6 @@ use python module for this sklearn is good
     -Polynomial
     -Gaussian
     -Sigmoid
+
+
+Based on the features in this dataset, you can predict whether a patient with diabetes will be readmitted to the hospital within 30 days, 60 days, or not at all.

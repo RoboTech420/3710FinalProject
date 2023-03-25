@@ -1,130 +1,122 @@
-# Import necessary libraries
+# MODULES
+import urllib.request
 import pandas as pd
-from sklearn.model_selection import train_test_split
-from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
-import numpy as np
-from sklearn.preprocessing import OneHotEncoder
-from sklearn.preprocessing import LabelEncoder
 import matplotlib.pyplot as plt
-
-# load data
-df = pd.read_csv('DataSets\Diabetes\diabetic_data.csv')
-
-# create DataFrame
-df = pd.DataFrame(df)
-
-# drop columns that are not relevant to the analysis
-df.drop(['diag_1','diag_2','diag_3','weight', 'age', 'medical_specialty', 'payer_code', 'encounter_id','patient_nbr', 'admission_type_id', 'discharge_disposition_id','admission_source_id'], axis=1, inplace=True)
-
-# replace '?' with 'Other' in the 'profession' column
-df['race'] = df['race'].replace('?', 'Other')
-
-
-# print the columns
-for column in df.columns:
-    print(column)
-    print(df[column].value_counts())
-
-# get the count of the number of columns
-num_columns = df.shape[1]
-print("Num coloumns: "+str(num_columns))
-
-print(df['race'].value_counts())
-
-for column in df.columns:
-    print(column)
+from sklearn import linear_model
+from sklearn.preprocessing import LabelEncoder
+from sklearn.model_selection import train_test_split
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.naive_bayes import GaussianNB # 1. choose model class
+from sklearn.model_selection import cross_val_score
+from sklearn.model_selection import KFold
+from sklearn.linear_model import LogisticRegression
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import accuracy_score
+from sklearn.model_selection import RandomizedSearchCV
+import seaborn as sns
+import ReadDataset
+import OurGraphs
 
 
+# VARIABLES
+testSize = 0.25
+
+# FUNCTIONS
+# prints the columns
+def printColumns(df):
+     # print the columns
+	for coloumn in df.columns:
+		print(coloumn)
+		print(df[coloumn].value_counts())
+	return
+
+# MAIN
+
+# LOAD THE DATA
+df = ReadDataset.load_data()
+
+# ENCODES DATASET
 # Create a LabelEncoder object for each column and fit them on the respective column
 label_encoders = {}
 for column in df.columns:
     if df[column].dtype == 'object':
         label_encoders[column] = LabelEncoder()
         label_encoders[column].fit(df[column])
-
 # Encode the values in each column and print the DataFrame with the encoded values
 for column, encoder in label_encoders.items():
     df[column] = encoder.transform(df[column])
-    
+
+
+# Select the coloumn we want to train for
+X_set = df.drop(['readmitted'], axis=1)
+Y_set = df['readmitted']
+
+
+# Prints the value counts
+print(Y_set.value_counts())
+
+# GAUSSIAN
+# Use the Gaussian Naive Bayes algorithm to classify data into two classes (i.e., binary classification).
+# It splits the dataset into training and testing sets using train_test_split function from scikit-learn,
+# then fits a GaussianNB model on the training data, predicts the class labels of the testing data using the predict method,
+# and finally calculates the accuracy score of the predicted labels using the accuracy_score function from scikit-learn.
+Xtrain, Xtest, ytrain, ytest = train_test_split(X_set, Y_set, random_state=42)
+model = GaussianNB()                       # 2. instantiate model
+model.fit(Xtrain, ytrain)                  # 3. fit model to data
+y_model = model.predict(Xtest)             # 4. predict on new data
+print(accuracy_score(ytest, y_model))
+
+# DECISION TREE
+# Implements a decision tree classifier on a given dataset and target column. It then splits the dataset into training and
+# testing sets, fits the classifier on the training data, and evaluates its performance on the testing data using the accuracy
+# score. Finally, it prints the accuracy score and the target column for reference.
+clf = DecisionTreeClassifier(max_depth=10, random_state=42)
+clf.fit(Xtrain, ytrain)
+y_pred = clf.predict(Xtest)
+accuracy = accuracy_score(ytest, y_pred)
+print(f'Decision Tree Accuracy : {accuracy}')
+
+
+# CROSS-VALIDATION
+# We are using logistic regression as the model to evaluate, but you can use any other model as per your requirements.
+# The cross_val_score function will return an array of accuracy scores for each fold. You can then compute the mean and
+# standard deviation of the scores to get an estimate of the model's accuracy on unseen data. 
+# Define the number of folds
+k = 10
+# Create a cross-validation object using KFold
+cv = KFold(n_splits=k, shuffle=True, random_state=42)
+# Create the model you want to evaluate
+model = LogisticRegression(max_iter=1000)
+# Evaluate the model using cross_val_score
+scores = cross_val_score(model, X_set, Y_set, cv=cv)
+# Print the scores
+print("Scores: ", scores)
+print("Mean Accuracy:", scores.mean())
+print("Standard Deviation:", scores.std())
+
+
+# HYPERPARAMETER TUNING
+'''
+print("Hyperparameter Tuning: ")
+params = {
+    'penalty': ['l1', 'l2', 'elasticnet'],
+    'C': [0.001, 0.01, 0.1, 1, 10, 100],
+    'fit_intercept': [True, False],
+    'class_weight': [None, 'balanced'],
+    'solver': ['newton-cg', 'lbfgs', 'liblinear', 'sag', 'saga'],
+    'max_iter': [100, 500, 1000, 5000]
+}
+cv = KFold(n_splits=k, shuffle=True, random_state=42)
+model = LogisticRegression()
+random_search = RandomizedSearchCV(model, param_distributions=params, cv=cv, n_iter=100, n_jobs=-1, random_state=42)
+random_search.fit(X_set, Y_set)
+print('Best parameters:', random_search.best_params_)
+print('Best score:', random_search.best_score_)
+'''
+
+
+
+#DECODES DATASET
 # Decode the encoded values in each column and print the DataFrame with the decoded values
 for column, encoder in label_encoders.items():
     df[column] = encoder.inverse_transform(df[column])
-    
-print("\nDecoded DataFrame:")
-print(df)
-print(len(label_encoders))
-
-print("Encoded DataFrame:")
-print(df)
-plt.hist(df['race'])
-plt.title('Patient Race Distribution')
-plt.xlabel('Race')
-plt.ylabel('Count')
-plt.show()
-
-plt.scatter(df['time_in_hospital'], df['num_medications'])
-plt.title('Time in Hospital vs Number of Medications')
-plt.xlabel('Time in Hospital')
-plt.ylabel('Number of Medications')
-plt.show()
-
-'''
-# Decode the encoded values in each column and print the DataFrame with the decoded values
-for column, encoder in label_encoders.items():
-    if df[column].dtype == 'object':
-        df[column + '_Decoded'] = encoder.inverse_transform(df[column + '_Encoded'])
-print("\nDecoded DataFrame:")
-print(df)
-'''
-
-
-# possible lable encoder
-'''
-col = df['race']
-# Instantiate the LabelEncoder
-le = LabelEncoder()
-
-# Fit the LabelEncoder to the data
-le.fit(col)
-
-# Transform the data to numerical form
-data_encoded = le.transform(col)
-print(data_encoded)
-
-# Decode the numerical data back to its original form
-data_decoded = le.inverse_transform(data_encoded)
-print(data_decoded)
-'''
-
-'''
-# replace '?' with NaN
-df = df.replace('?', np.nan)
-
-# drop rows with missing or invalid values
-df.dropna(inplace=True)
-df = df[df['gender'] != 'Unknown/Invalid']
-
-# convert categorical variables to dummy variables
-df = pd.get_dummies(df, columns=['race', 'gender', 'age'])
-
-
-# drop columns that are not relevant to the analysis
-#df.drop(['admission_type_id', 'discharge_disposition_id', 'admission_source_id'], axis=1, inplace=True)
-'''
-
-'''
-# split data into training and testing sets
-X = df.drop(['readmitted'], axis=1)
-y = df['readmitted']
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
-
-# train logistic regression model
-model = LogisticRegression()
-model.fit(X_train, y_train)
-
-# evaluate model performance
-y_pred = model.predict(X_test)
-print("Accuracy:", accuracy_score(y_test, y_pred))
-'''
-
