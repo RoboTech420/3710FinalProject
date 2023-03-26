@@ -35,6 +35,9 @@ def printColumns(df):
 # LOAD THE DATA
 df = ReadDataset.load_data()
 
+# DATA INFORMATION
+print(df.info())
+
 # ENCODES DATASET
 # Create a LabelEncoder object for each column and fit them on the respective column
 label_encoders = {}
@@ -53,16 +56,16 @@ Y_set = df['readmitted']
 #Splits the dataset into training and testing sets using train_test_split function from scikit-learn
 X_train, X_test, y_train, y_test = train_test_split(X_set, Y_set, random_state=1)
 
+# SCALING DATA
 # Create a StandardScaler object to scale the input features
 scaler = StandardScaler()
-
 # Fit the scaler on the training set and transform both the training and test sets
 X_train_scaled = scaler.fit_transform(X_train)
 X_test_scaled = scaler.transform(X_test)
 
 
 # Prints the value counts
-print(Y_set.value_counts())
+print(f'value counts {Y_set.value_counts()}')
 # GAUSSIAN
 # Use the Gaussian Naive Bayes algorithm to classify data into two classes (i.e., binary classification).
 # then fits a GaussianNB model on the training data, predicts the class labels of the testing data using the predict method,
@@ -102,8 +105,17 @@ print("Standard Deviation:", scores.std())
 
 
 # HYPERPARAMETER TUNING
-
+# Perform hyperparameter tuning for a logistic regression model in scikit-learn using randomized search
+# The hyperparameters being tuned are:
+    # penalty: regularization penalty to be applied. It can be L1, L2, or ElasticNet.
+    # C: inverse of regularization strength. Smaller values specify stronger regularization.
+    # fit_intercept: whether to calculate the intercept for this model.
+    # class_weight: weights associated with classes in the form of a dictionary, or ‘balanced’ to automatically adjust weights based on the class frequencies.
+    # solver: algorithm to be used for optimization.
+    # max_iter: maximum number of iterations taken for the solver to converge.
 print("Hyperparameter Tuning: ")
+print("TURN HYPERPARAMETER TUNING BACK ON")
+'''
 params = {
     'penalty': ['l1', 'l2', 'elasticnet'],
     'C': [0.001, 0.01, 0.1, 1, 10, 100],
@@ -112,13 +124,17 @@ params = {
     'solver': ['newton-cg', 'lbfgs', 'liblinear', 'sag', 'saga'],
     'max_iter': [100, 500, 1000, 5000]
 }
+# The KFold function is used to split the data into k folds for cross-validation
+# The n_iter parameter of RandomizedSearchCV is set to 100, which means that 100 random combinations of hyperparameters will be tried.
+# n_jobs=-1 enables parallel processing using all available CPU cores.
 cv = KFold(n_splits=k, shuffle=True, random_state=42)
 model = LogisticRegression()
 random_search = RandomizedSearchCV(model, param_distributions=params, cv=cv, n_iter=100, n_jobs=-1, random_state=42)
 random_search.fit(X_train_scaled, y_train)
+# The best hyperparameters found by the search are printed along with the best score achieved during cross-validation.
 print('Best parameters:', random_search.best_params_)
 print('Best score:', random_search.best_score_)
-
+'''
 
 #DECODES DATASET
 # Decode the encoded values in each column and print the DataFrame with the decoded values
