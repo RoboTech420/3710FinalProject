@@ -29,3 +29,38 @@ def snlPlot(df):
     sns.lineplot(df)
     plt.show()
     return
+
+# Plot race vs readmitted
+def plot_race_countplot(df):
+    sns.countplot(data=df, x='race', hue='readmitted')
+    plt.legend(loc='upper right')
+    plt.show()
+
+# Plot race vs readmitted
+def plot_age_countplot(df):
+    sns.countplot(data=df, x='age', hue='readmitted')
+    plt.legend(loc='upper right')
+    plt.show()
+
+# Plot race vs readmitted
+def plot_gender_countplot(df):
+    sns.countplot(data=df, x='gender', hue='readmitted')
+    plt.legend(loc='upper right')
+    plt.show()
+
+# Plot race vs readmitted
+def plot_diabetes_countplot(df):
+    sns.countplot(data=df, x='diabetesMed', hue='readmitted')
+    plt.legend(loc='upper right')
+    plt.show()
+
+# Plot Time in Hospital VS. Readmission
+def plot_hospital_countplot(df):
+    fig = plt.figure(figsize=(12,6))
+    ax=sns.kdeplot(df.loc[(df['readmitted'] == "NO"),'time_in_hospital'] , color='b',fill=True,label='No readmittion')
+    ax=sns.kdeplot(df.loc[(df['readmitted'] == ">30"),'time_in_hospital'] , color='r',fill=True, label='Readmittion in >30 days')
+    ax=sns.kdeplot(df.loc[(df['readmitted'] == "<30"),'time_in_hospital'] , color='y',fill=True, label='Readmitted in <30 days')
+    ax.set(xlabel='Time in Hospital (days)', ylabel='Frequency')
+    plt.title('Time in Hospital VS. Readmission')
+    plt.show()
+

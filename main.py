@@ -116,7 +116,7 @@ print("Standard Deviation:", scores.std())
     # max_iter: maximum number of iterations taken for the solver to converge.
 print("Hyperparameter Tuning: ")
 print("TURN HYPERPARAMETER TUNING BACK ON")
-
+'''
 params = {
     'penalty': ['l1', 'l2', 'elasticnet'],
     'C': [0.001, 0.01, 0.1, 1, 10, 100],
@@ -125,6 +125,7 @@ params = {
     'solver': ['newton-cg', 'lbfgs', 'liblinear', 'sag', 'saga'],
     'max_iter': [100, 500, 1000, 5000]
 }
+
 # The KFold function is used to split the data into k folds for cross-validation
 # The n_iter parameter of RandomizedSearchCV is set to 100, which means that 100 random combinations of hyperparameters will be tried.
 # n_jobs=-1 enables parallel processing using all available CPU cores.
@@ -135,7 +136,7 @@ random_search.fit(X_train_scaled, y_train)
 # The best hyperparameters found by the search are printed along with the best score achieved during cross-validation.
 print('Best parameters:', random_search.best_params_)
 print('Best score:', random_search.best_score_)
-
+'''
 
 #DECODES DATASET
 # Decode the encoded values in each column and print the DataFrame with the decoded values
@@ -143,4 +144,11 @@ for column, encoder in label_encoders.items():
     df[column] = encoder.inverse_transform(df[column])
 
 # GRAPHS
-#OurGraphs.racemap(df)
+'''
+OurGraphs.racemap(df)
+OurGraphs.plot_race_countplot(df)
+OurGraphs.plot_age_countplot(df)
+OurGraphs.plot_gender_countplot(df)
+OurGraphs.plot_diabetes_countplot(df)
+'''
+OurGraphs.plot_hospital_countplot(df)
