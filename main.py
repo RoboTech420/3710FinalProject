@@ -42,9 +42,10 @@ print(df.info())
 # Create a LabelEncoder object for each column and fit them on the respective column
 label_encoders = {}
 for column in df.columns:
-    if df[column].dtype == 'object':
-        label_encoders[column] = LabelEncoder()
-        label_encoders[column].fit(df[column])
+    if df[column].dtype != 'int64' and df[column].dtype != 'float64':
+        df[column] = df[column].astype(str)
+    label_encoders[column] = LabelEncoder()
+    label_encoders[column].fit(df[column])
 # Encode the values in each column and print the DataFrame with the encoded values
 for column, encoder in label_encoders.items():
     df[column] = encoder.transform(df[column])
@@ -115,7 +116,7 @@ print("Standard Deviation:", scores.std())
     # max_iter: maximum number of iterations taken for the solver to converge.
 print("Hyperparameter Tuning: ")
 print("TURN HYPERPARAMETER TUNING BACK ON")
-'''
+
 params = {
     'penalty': ['l1', 'l2', 'elasticnet'],
     'C': [0.001, 0.01, 0.1, 1, 10, 100],
@@ -134,7 +135,7 @@ random_search.fit(X_train_scaled, y_train)
 # The best hyperparameters found by the search are printed along with the best score achieved during cross-validation.
 print('Best parameters:', random_search.best_params_)
 print('Best score:', random_search.best_score_)
-'''
+
 
 #DECODES DATASET
 # Decode the encoded values in each column and print the DataFrame with the decoded values
