@@ -1,16 +1,16 @@
 import pandas as pd
 
 def load_data():
-    # load data
+    # Load data
     df = pd.read_csv('DataSets\Diabetes\diabetic_data.csv')
 
-    # create DataFrame
+    # Create DataFrame
     df = pd.DataFrame(df)
 
-    # replace '?' with 'Other' in the 'race' column
+    # Replace '?' with 'Other' in the 'race' column
     df['race'] = df['race'].replace('?', 'Other')
 
-    #start by setting all values containing E or V into 0 (as one category)
+    # Start by setting all values containing E or V into 0 (as one category)
     df.loc[df['diag_1'].str.contains('V',na=False,case=False), 'diag_1'] = 0
     df.loc[df['diag_1'].str.contains('E',na=False,case=False), 'diag_1'] = 0
     df.loc[df['diag_2'].str.contains('V',na=False,case=False), 'diag_2'] = 0
@@ -18,7 +18,7 @@ def load_data():
     df.loc[df['diag_3'].str.contains('V',na=False,case=False), 'diag_3'] = 0
     df.loc[df['diag_3'].str.contains('E',na=False,case=False), 'diag_3'] = 0
 
-    #seting all missing values into -1
+    # Seting all missing values into -1
     df['diag_1'] = df['diag_1'].replace('?', -1)
     df['diag_2'] = df['diag_2'].replace('?', -1)
     df['diag_3'] = df['diag_3'].replace('?', -1)
@@ -29,7 +29,7 @@ def load_data():
     # Drop the duplicate patient records
     df = df.drop_duplicates(subset=['patient_nbr'])
 
-    # drop columns that are not relevant to the analysis
+    # Drop columns that are not relevant to the analysis
     df.drop(['encounter_id', 'patient_nbr', 'weight', 'payer_code', 'medical_specialty', 'repaglinide', 'nateglinide', 'chlorpropamide', 'acarbose', 'miglitol', 'troglitazone', 'tolazamide', 'examide', 'citoglipton', 'glyburide_metformin', 'glipizide_metformin', 'glimepiride_pioglitazone', 'metformin_rosiglitazone','metformin_pioglitazone', 'acetohexamide', 'tolbutamide'], axis=1, inplace=True)
     return df
 

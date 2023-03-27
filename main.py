@@ -1,14 +1,14 @@
 # MODULES
 from sklearn.preprocessing import LabelEncoder
+from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.naive_bayes import GaussianNB # 1. choose model class
-from sklearn.model_selection import cross_val_score
 from sklearn.model_selection import KFold
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import accuracy_score
-from sklearn.preprocessing import StandardScaler
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score
+from sklearn.model_selection import cross_val_score
 import ReadDataset
 import OurGraphs
 
@@ -69,7 +69,7 @@ y_pred = clf.predict(X_test_scaled)
 score = clf.score(X_test_scaled, y_test)
 print(f"Random Forest Classifier: {score}")
 
-# GAUSSIAN
+# GAUSSIAN NAIVE BAYES
 # Use the Gaussian Naive Bayes algorithm to classify data into two classes (i.e., binary classification).
 # then fits a GaussianNB model on the training data, predicts the class labels of the testing data using the predict method,
 # and finally calculates the accuracy score of the predicted labels using the accuracy_score function from scikit-learn.
@@ -78,7 +78,7 @@ model.fit(X_train_scaled, y_train)                  # 3. fit model to data
 y_model = model.predict(X_test_scaled )             # 4. predict on new data
 print(accuracy_score(y_test, y_model))
 
-# DECISION TREE
+# DECISION TREE CLASSIFIER
 # Implements a decision tree classifier on a given dataset and target column. It then splits the dataset into training and
 # testing sets, fits the classifier on the training data, and evaluates its performance on the testing data using the accuracy
 # score. Finally, it prints the accuracy score and the target column for reference.
