@@ -6,6 +6,7 @@ def load_data():
 
     # create DataFrame
     df = pd.DataFrame(df)
+
     # replace '?' with 'Other' in the 'race' column
     df['race'] = df['race'].replace('?', 'Other')
 
@@ -26,7 +27,7 @@ def load_data():
     df['gender'] = df['gender'].replace('Unknown/Invalid', 'Male')
 
     # Drop the duplicate patient records
-    #df = df.drop_duplicates(subset=['patient_nbr'])
+    df = df.drop_duplicates(subset=['patient_nbr'])
 
     # drop columns that are not relevant to the analysis
     df.drop(['encounter_id', 'patient_nbr', 'weight', 'payer_code', 'medical_specialty', 'repaglinide', 'nateglinide', 'chlorpropamide', 'acarbose', 'miglitol', 'troglitazone', 'tolazamide', 'examide', 'citoglipton', 'glyburide_metformin', 'glipizide_metformin', 'glimepiride_pioglitazone', 'metformin_rosiglitazone','metformin_pioglitazone', 'acetohexamide', 'tolbutamide'], axis=1, inplace=True)
