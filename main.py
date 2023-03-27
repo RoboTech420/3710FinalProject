@@ -8,6 +8,7 @@ from sklearn.model_selection import KFold
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score
 from sklearn.preprocessing import StandardScaler
+from sklearn.ensemble import RandomForestClassifier
 import ReadDataset
 import OurGraphs
 
@@ -58,9 +59,16 @@ scaler = StandardScaler()
 X_train_scaled = scaler.fit_transform(X_train)
 X_test_scaled = scaler.transform(X_test)
 
+# RANDOM FOREST CLASSIFIER
+# The n_estimators parameter specifies the number of trees in the forest. A larger number of trees can improve the performance of the classifier but can also increase the training time.
+# The random_state parameter sets the random seed for reproducibility. By setting it to a fixed value, you ensure that the results will be the same every time you run the code.
+# The score method computes the mean accuracy of the classifier on the testing data
+clf = RandomForestClassifier(n_estimators=100, random_state=42)
+clf.fit(X_train, y_train)
+y_pred = clf.predict(X_test_scaled)
+score = clf.score(X_test_scaled, y_test)
+print(f"Random Forest Classifier: {score}")
 
-# Prints the value counts
-print(f'value counts {Y_set.value_counts()}')
 # GAUSSIAN
 # Use the Gaussian Naive Bayes algorithm to classify data into two classes (i.e., binary classification).
 # then fits a GaussianNB model on the training data, predicts the class labels of the testing data using the predict method,
