@@ -30,27 +30,31 @@ def snlPlot(df):
     plt.show()
     return
 
-# Plot race vs readmitted
+# Plot Race vs Readmitted
 def plot_race_countplot(df):
     sns.countplot(data=df, x='race', hue='readmitted')
+    plt.title('Race vs Readmitted')
     plt.legend(loc='upper right')
     plt.show()
 
-# Plot race vs readmitted
+# Plot Age vs Readmitted
 def plot_age_countplot(df):
     sns.countplot(data=df, x='age', hue='readmitted')
+    plt.title('Age vs Readmitted')
     plt.legend(loc='upper right')
     plt.show()
 
-# Plot race vs readmitted
+# Plot Gender vs Readmitted
 def plot_gender_countplot(df):
     sns.countplot(data=df, x='gender', hue='readmitted')
+    plt.title('Gender vs Readmitted')
     plt.legend(loc='upper right')
     plt.show()
 
-# Plot race vs readmitted
+# Plot Diabetes vs Readmitted
 def plot_diabetes_countplot(df):
     sns.countplot(data=df, x='diabetesMed', hue='readmitted')
+    plt.title('Diabetes vs Readmitted')
     plt.legend(loc='upper right')
     plt.show()
 

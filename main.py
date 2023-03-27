@@ -45,6 +45,10 @@ for column in df.columns:
 for column, encoder in label_encoders.items():
     df[column] = encoder.transform(df[column])
 
+# Heat Map
+'''
+OurGraphs.heatmap(df)
+'''
 
 # Select the coloumn we want to train for
 X_set = df.drop(['readmitted'], axis=1)
@@ -58,6 +62,8 @@ scaler = StandardScaler()
 # Fit the scaler on the training set and transform both the training and test sets
 X_train_scaled = scaler.fit_transform(X_train)
 X_test_scaled = scaler.transform(X_test)
+
+
 
 # RANDOM FOREST CLASSIFIER
 # The n_estimators parameter specifies the number of trees in the forest. A larger number of trees can improve the performance of the classifier but can also increase the training time.
@@ -76,7 +82,7 @@ print(f"Random Forest Classifier: {score}")
 model = GaussianNB()                       # 2. instantiate model
 model.fit(X_train_scaled, y_train)                  # 3. fit model to data
 y_model = model.predict(X_test_scaled )             # 4. predict on new data
-print(accuracy_score(y_test, y_model))
+print(f'Gaussian Naive Bayes : {accuracy_score(y_test, y_model)}')
 
 # DECISION TREE CLASSIFIER
 # Implements a decision tree classifier on a given dataset and target column. It then splits the dataset into training and
@@ -94,7 +100,7 @@ print(f'Decision Tree Accuracy : {accuracy}')
 # The cross_val_score function will return an array of accuracy scores for each fold. You can then compute the mean and
 # standard deviation of the scores to get an estimate of the model's accuracy on unseen data. 
 # Define the number of folds
-k = 2
+k = 4
 # Create a cross-validation object using KFold
 cv = KFold(n_splits=k, shuffle=True, random_state=42)
 # Create the model you want to evaluate
@@ -102,9 +108,9 @@ model = LogisticRegression(max_iter=5000)
 # Evaluate the model using cross_val_score
 scores = cross_val_score(model, X_train_scaled, y_train, cv=cv)
 # Print the scores
-print("Scores: ", scores)
-print("Mean Accuracy:", scores.mean())
-print("Standard Deviation:", scores.std())
+print("K Scores : ", scores)
+print("K Mean Accuracy : ", scores.mean())
+#print("Standard Deviation:", scores.std())
 
 
 # HYPERPARAMETER TUNING
@@ -136,8 +142,8 @@ model = LogisticRegression()
 random_search = RandomizedSearchCV(model, param_distributions=params, cv=cv, n_iter=100, n_jobs=-1, random_state=42)
 random_search.fit(X_train_scaled, y_train)
 # The best hyperparameters found by the search are printed along with the best score achieved during cross-validation.
-print('Best parameters:', random_search.best_params_)
-print('Best score:', random_search.best_score_)
+print('Best parameters : ', random_search.best_params_)
+print('Best score : ', random_search.best_score_)
 '''
 
 #DECODES DATASET
@@ -152,5 +158,5 @@ OurGraphs.plot_race_countplot(df)
 OurGraphs.plot_age_countplot(df)
 OurGraphs.plot_gender_countplot(df)
 OurGraphs.plot_diabetes_countplot(df)
-'''
 OurGraphs.plot_hospital_countplot(df)
+'''
