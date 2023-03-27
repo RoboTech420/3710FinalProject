@@ -11,7 +11,7 @@ from sklearn.metrics import accuracy_score
 from sklearn.model_selection import cross_val_score
 import ReadDataset
 import OurGraphs
-
+from sklearn.model_selection import GridSearchCV
 
 # VARIABLES
 testSize = 0.25
@@ -76,13 +76,28 @@ score = clf.score(X_test_scaled, y_test)
 print(f"Random Forest Classifier: {score}")
 
 # GAUSSIAN NAIVE BAYES
-# Use the Gaussian Naive Bayes algorithm to classify data into two classes (i.e., binary classification).
-# then fits a GaussianNB model on the training data, predicts the class labels of the testing data using the predict method,
-# and finally calculates the accuracy score of the predicted labels using the accuracy_score function from scikit-learn.
-model = GaussianNB()                       # 2. instantiate model
-model.fit(X_train_scaled, y_train)                  # 3. fit model to data
-y_model = model.predict(X_test_scaled )             # 4. predict on new data
-print(f'Gaussian Naive Bayes : {accuracy_score(y_test, y_model)}')
+# Define a grid of hyperparameters to search over the smoothing parameter 'var_smoothing'.
+# Perform a grid search using GridSearchCV with 5-fold cross validation.
+# After the grid search is complete, we print the best hyperparameters found by the search and
+# use the best model to predict on the testing data.
+# Print the accuracy score of the best model.
+# define the hyperparameters to search over
+param_grid = {
+    'var_smoothing': [1e-9, 1e-8, 1e-7, 1e-6, 1e-5]
+}
+# Instantiate the model
+model = GaussianNB()
+# perform a grid search over the hyperparameters
+grid = GridSearchCV(estimator=model, param_grid=param_grid, cv=5)
+grid.fit(X_train_scaled, y_train)
+# print the best hyperparameters
+print(f"Best hyperparameters: {grid.best_params_}")
+# predict on new data using the best model
+best_model = grid.best_estimator_
+y_model = best_model.predict(X_test_scaled)
+# print the accuracy score of the best model
+print(f"Gaussian Naive Bayes Accuracy score: {accuracy_score(y_test, y_model)}")
+
 
 # DECISION TREE CLASSIFIER
 # Implements a decision tree classifier on a given dataset and target column. It then splits the dataset into training and
@@ -145,6 +160,8 @@ random_search.fit(X_train_scaled, y_train)
 print('Best parameters : ', random_search.best_params_)
 print('Best score : ', random_search.best_score_)
 '''
+
+
 
 #DECODES DATASET
 # Decode the encoded values in each column and print the DataFrame with the decoded values
