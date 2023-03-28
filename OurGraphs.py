@@ -66,5 +66,6 @@ def plot_hospital_countplot(df):
     ax=sns.kdeplot(df.loc[(df['readmitted'] == "<30"),'time_in_hospital'] , color='y',fill=True, label='Readmitted in <30 days')
     ax.set(xlabel='Time in Hospital (days)', ylabel='Frequency')
     plt.title('Time in Hospital VS. Readmitted')
+    plt.legend(loc='upper right')
     plt.show()
 
