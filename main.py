@@ -111,22 +111,9 @@ print(f'Decision Tree Accuracy : {accuracy}')
 
 
 # CROSS-VALIDATION
-# We are using logistic regression as the model to evaluate, but you can use any other model as per your requirements.
+# We are using logistic regression as the model to evaluate.
 # The cross_val_score function will return an array of accuracy scores for each fold. You can then compute the mean and
 # standard deviation of the scores to get an estimate of the model's accuracy on unseen data. 
-# Define the number of folds
-k = 4
-# Create a cross-validation object using KFold
-cv = KFold(n_splits=k, shuffle=True, random_state=42)
-# Create the model you want to evaluate
-model = LogisticRegression(max_iter=5000)
-# Evaluate the model using cross_val_score
-scores = cross_val_score(model, X_train_scaled, y_train, cv=cv)
-# Print the scores
-print("K Scores : ", scores)
-print("K Mean Accuracy : ", scores.mean())
-#print("Standard Deviation:", scores.std())
-
 
 # HYPERPARAMETER TUNING
 # Perform hyperparameter tuning for a logistic regression model in scikit-learn using randomized search
