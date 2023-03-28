@@ -46,9 +46,9 @@ for column, encoder in label_encoders.items():
     df[column] = encoder.transform(df[column])
 
 # Heat Map
-'''
+
 OurGraphs.heatmap(df)
-'''
+
 
 # Select the coloumn we want to train for
 X_set = df.drop(['readmitted'], axis=1)
@@ -110,7 +110,7 @@ accuracy = accuracy_score(y_test, y_pred)
 print(f'Decision Tree Accuracy : {accuracy}')
 
 
-# CROSS-VALIDATION
+# K-FOLD CROSS VALIDATION 
 # We are using logistic regression as the model to evaluate.
 # The cross_val_score function will return an array of accuracy scores for each fold. You can then compute the mean and
 # standard deviation of the scores to get an estimate of the model's accuracy on unseen data. 
@@ -156,11 +156,10 @@ for column, encoder in label_encoders.items():
     df[column] = encoder.inverse_transform(df[column])
 
 # GRAPHS
-'''
+
 OurGraphs.racemap(df)
 OurGraphs.plot_race_countplot(df)
 OurGraphs.plot_age_countplot(df)
 OurGraphs.plot_gender_countplot(df)
 OurGraphs.plot_diabetes_countplot(df)
 OurGraphs.plot_hospital_countplot(df)
-'''
