@@ -144,7 +144,7 @@ results['Decision Tree Classifier'] = {'accuracy': accuracy, 'f1_score': f1}
     # max_iter: maximum number of iterations taken for the solver to converge.
 print("Hyperparameter Tuning: ")
 print("TURN HYPERPARAMETER TUNING BACK ON")
-'''
+
 params = {
     'penalty': ['l1', 'l2', 'elasticnet'],
     'C': [0.001, 0.01, 0.1, 1, 10, 100],
@@ -167,15 +167,13 @@ y_pred = best_model.predict(X_test_scaled)
 # The best hyperparameters found by the search are printed along with the best score achieved during cross-validation.
 accuracy = accuracy_score(y_test, y_pred)
 f1 = f1_score(y_test, y_pred, average='weighted')
-f1_micro = f1_score(y_test, y_pred, average='micro')
-f1_macro = f1_score(y_test, y_pred, average='macro')
 print('Best parameters:', random_search.best_params_)
 print('Best score:', random_search.best_score_)
 print('Logistic Regression Accuracy score:', accuracy)
 print('Logistic Regression F1 score:', f1)
 results['Logistic Regression'] = {'accuracy': accuracy, 'f1_score': f1}
-'''
 
+print("TURN HYPERPARAMETER TUNING BACK ON")
 # Print dictionary containing results
 print('RESULTS')
 print(results)
