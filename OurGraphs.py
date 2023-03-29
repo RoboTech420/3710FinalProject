@@ -69,6 +69,7 @@ def plot_hospital_countplot(df):
     plt.legend(loc='upper right')
     plt.show()
 
+# Bar plot to compare the F1 score and accuracy
 def plot_compare_f1_acc(results):
     # Create a bar plot
     fig, ax = plt.subplots()
