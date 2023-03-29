@@ -144,7 +144,7 @@ results['Decision Tree Classifier'] = {'accuracy': accuracy, 'f1_score': f1}
     # max_iter: maximum number of iterations taken for the solver to converge.
 print("Hyperparameter Tuning: ")
 print("TURN HYPERPARAMETER TUNING BACK ON")
-
+'''
 params = {
     'penalty': ['l1', 'l2', 'elasticnet'],
     'C': [0.001, 0.01, 0.1, 1, 10, 100],
@@ -174,12 +174,13 @@ print('Best score:', random_search.best_score_)
 print('Logistic Regression Accuracy score:', accuracy)
 print('Logistic Regression F1 score:', f1)
 results['Logistic Regression'] = {'accuracy': accuracy, 'f1_score': f1}
+'''
 
 # Print dictionary containing results
 print('RESULTS')
 print(results)
 
-
+print(f"Count Readmitted: {df['readmitted'].value_counts()}")
 
 #DECODES DATASET
 # Decode the encoded values in each column and print the DataFrame with the decoded values
@@ -187,7 +188,10 @@ for column, encoder in label_encoders.items():
     df[column] = encoder.inverse_transform(df[column])
 
 # GRAPHS
+print('graphs')
+OurGraphs.plot_pie_chart(df)
 OurGraphs.plot_compare_f1_acc(results)
+
 '''
 OurGraphs.racemap(df)
 OurGraphs.plot_race_countplot(df)

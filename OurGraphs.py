@@ -89,3 +89,9 @@ def plot_compare_f1_acc(results):
     plt.xticks([i + bar_width/2 for i in x_pos], models)
     plt.legend()
     plt.show()
+
+# Pie Chart of the Readmitted Data
+def plot_pie_chart(df):
+    plt.pie(df['readmitted'].value_counts(), labels=df['readmitted'])
+    plt.title("Comparison of Readmitted Data")
+    plt.show()
