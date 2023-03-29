@@ -7,6 +7,7 @@ from sklearn.naive_bayes import GaussianNB # 1. choose model class
 from sklearn.model_selection import KFold
 from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.svm import SVC
 from sklearn.metrics import accuracy_score
 from sklearn.model_selection import cross_val_score
 import ReadDataset
@@ -15,6 +16,7 @@ from sklearn.model_selection import GridSearchCV
 from sklearn.model_selection import RandomizedSearchCV
 from sklearn.metrics import f1_score
 import matplotlib.pyplot as plt
+from scipy.stats import uniform
 
 # VARIABLES
 testSize = 0.25
@@ -128,6 +130,38 @@ print(f'Decision Tree F1 Score: {f1}')
 results['Decision Tree Classifier'] = {'accuracy': accuracy, 'f1_score': f1}
 
 
+# SUPPORT VECTOR MACHINE
+# 5 min run time
+'''
+# Train an SVM classifier with a linear kernel
+clf = SVC(kernel='linear', C=1, random_state=42)
+clf.fit(X_train_scaled, y_train)
+# Make predictions on the test set
+y_pred = clf.predict(X_test_scaled)
+# Evaluate the performance of the classifier using accuracy and F1 score
+accuracy = accuracy_score(y_test, y_pred)
+f1 = f1_score(y_test, y_pred, average='weighted')
+print(f'SVM Accuracy: {accuracy}')
+print(f'SVM F1 Score: {f1}')
+# Save F1 score and string name
+results['SVM Classifier'] = {'accuracy': accuracy, 'f1_score': f1}
+'''
+
+
+'''
+clf.fit(X_train_scaled, y_train)
+# Make predictions on the test set
+y_pred = clf.predict(X_test_scaled)
+# Evaluate the performance of the classifier using accuracy and F1 score
+accuracy = accuracy_score(y_test, y_pred)
+f1 = f1_score(y_test, y_pred, average='weighted')
+print(f'SVM Accuracy: {accuracy}')
+print(f'SVM F1 Score: {f1}')
+# Save F1 score and string name
+results['SVM Classifier'] = {'accuracy': accuracy, 'f1_score': f1}
+'''
+
+
 # K-FOLD CROSS VALIDATION 
 # We are using logistic regression as the model to evaluate.
 # The cross_val_score function will return an array of accuracy scores for each fold. You can then compute the mean and
@@ -182,6 +216,8 @@ print("hello")
 # Print dictionary containing results
 for result in results:
      print(f'{result} : {results[result]}')
+
+
 
 #DECODES DATASET
 # Decode the encoded values in each column and print the DataFrame with the decoded values
