@@ -96,3 +96,11 @@ def plot_pie_chart(df):
     plt.pie(df['readmitted'].value_counts(), labels=labels)
     plt.title("Comparison of Readmitted Data")
     plt.show()
+
+# Pie Chart of the Readmitted Data
+def plot_fold_mean(mean_scores):
+    plt.hist(mean_scores, bins=20)
+    plt.xlabel('Mean Test Score')
+    plt.ylabel('Frequency')
+    plt.title('Distribution of K-Fold Mean Test Scores')
+    plt.show()

@@ -145,6 +145,7 @@ results['Decision Tree Classifier'] = {'accuracy': accuracy, 'f1_score': f1}
 print("Hyperparameter Tuning: ")
 print("TURN HYPERPARAMETER TUNING BACK ON")
 
+
 params = {
     'penalty': ['l1', 'l2', 'elasticnet'],
     'C': [0.001, 0.01, 0.1, 1, 10, 100],
@@ -171,14 +172,16 @@ print('Best parameters:', random_search.best_params_)
 print('Best score:', random_search.best_score_)
 print('Logistic Regression Accuracy score:', accuracy)
 print('Logistic Regression F1 score:', f1)
+# Save F1 score and string name
 results['Logistic Regression'] = {'accuracy': accuracy, 'f1_score': f1}
+#print(random_search.cv_results_['mean_test_score'])
+mean_scores = random_search.cv_results_['mean_test_score']
 
-print("TURN HYPERPARAMETER TUNING BACK ON")
+OurGraphs.plot_fold_mean(mean_scores)
+print("hello")
 # Print dictionary containing results
-print('RESULTS')
-print(results)
-
-print(f"Count Readmitted:\n {df['readmitted'].value_counts()}")
+for result in results:
+     print(f'{result} : {results[result]}')
 
 #DECODES DATASET
 # Decode the encoded values in each column and print the DataFrame with the decoded values
@@ -186,10 +189,8 @@ for column, encoder in label_encoders.items():
     df[column] = encoder.inverse_transform(df[column])
 
 
-print(f"Count Readmitted:\n {df['readmitted'].value_counts()}")
 
 # GRAPHS
-print('graphs')
 OurGraphs.plot_pie_chart(df)
 OurGraphs.plot_compare_f1_acc(results)
 
