@@ -92,6 +92,7 @@ def plot_compare_f1_acc(results):
 
 # Pie Chart of the Readmitted Data
 def plot_pie_chart(df):
-    plt.pie(df['readmitted'].value_counts(), labels=df['readmitted'])
+    labels = ["NO", ">30", "<30"]
+    plt.pie(df['readmitted'].value_counts(), labels=labels)
     plt.title("Comparison of Readmitted Data")
     plt.show()

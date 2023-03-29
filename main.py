@@ -180,12 +180,15 @@ results['Logistic Regression'] = {'accuracy': accuracy, 'f1_score': f1}
 print('RESULTS')
 print(results)
 
-print(f"Count Readmitted: {df['readmitted'].value_counts()}")
+print(f"Count Readmitted:\n {df['readmitted'].value_counts()}")
 
 #DECODES DATASET
 # Decode the encoded values in each column and print the DataFrame with the decoded values
 for column, encoder in label_encoders.items():
     df[column] = encoder.inverse_transform(df[column])
+
+
+print(f"Count Readmitted:\n {df['readmitted'].value_counts()}")
 
 # GRAPHS
 print('graphs')
