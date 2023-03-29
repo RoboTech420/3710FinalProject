@@ -17,6 +17,7 @@ from sklearn.model_selection import RandomizedSearchCV
 from sklearn.metrics import f1_score
 import matplotlib.pyplot as plt
 from scipy.stats import uniform
+import time
 
 # VARIABLES
 testSize = 0.25
@@ -76,15 +77,18 @@ X_test_scaled = scaler.transform(X_test)
 # The n_estimators parameter specifies the number of trees in the forest. A larger number of trees can improve the performance of the classifier but can also increase the training time.
 # The random_state parameter sets the random seed for reproducibility. By setting it to a fixed value, you ensure that the results will be the same every time you run the code.
 # The score method computes the mean accuracy of the classifier on the testing data
+start_time = time.time()
 clf = RandomForestClassifier(n_estimators=100, random_state=42)
 clf.fit(X_train, y_train)
 y_pred = clf.predict(X_test_scaled)
 accuracy = clf.score(X_test_scaled, y_test)
 f1 = f1_score(y_test, y_pred, average='weighted')
+end_time = time.time()
 print(f"Random Forest Classifier: {accuracy}")
 print(f"F1 Score: {f1}")
 # Save F1 score and string name
-results['Random Forest F1 Score'] = {'accuracy': accuracy, 'f1_score': f1}
+time_diff = end_time - start_time
+results['Random Forest F1 Score'] = {'accuracy': accuracy, 'f1_score': f1, 'time': time_diff}
 
 # GAUSSIAN NAIVE BAYES
 # Define a grid of hyperparameters to search over the smoothing parameter 'var_smoothing'.
@@ -93,6 +97,7 @@ results['Random Forest F1 Score'] = {'accuracy': accuracy, 'f1_score': f1}
 # use the best model to predict on the testing data.
 # Print the accuracy score of the best model.
 # define the hyperparameters to search over
+start_time = time.time()
 param_grid = {
     'var_smoothing': [1e-9, 1e-8, 1e-7, 1e-6, 1e-5]
 }
@@ -109,31 +114,37 @@ y_model = best_model.predict(X_test_scaled)
 # calculate and print the accuracy and F1 score of the best model
 accuracy = accuracy_score(y_test, y_model)
 f1 = f1_score(y_test, y_model, average='weighted')
+end_time = time.time()
 print(f"Gaussian Naive Bayes Accuracy score: {accuracy}")
 print(f"Gaussian Naive Bayes F1 score: {f1}")
 # Save F1 score and string name
-results['Gaussian Naive Bayes'] = {'accuracy': accuracy, 'f1_score': f1}
+time_diff = end_time - start_time
+results['Gaussian Naive Bayes'] = {'accuracy': accuracy, 'f1_score': f1, 'time': time_diff}
 
 
 # DECISION TREE CLASSIFIER
 # Implements a decision tree classifier on a given dataset and target column. It then splits the dataset into training and
 # testing sets, fits the classifier on the training data, and evaluates its performance on the testing data using the accuracy
 # score. Finally, it prints the accuracy score and the target column for reference.
+start_time = time.time()
 clf = DecisionTreeClassifier(max_depth=5, random_state=42)
 clf.fit(X_train_scaled, y_train)
 y_pred = clf.predict(X_test_scaled )
 accuracy = accuracy_score(y_test, y_pred)
 f1 = f1_score(y_test, y_pred, average='weighted')
+end_time = time.time()
 print(f'Decision Tree Accuracy: {accuracy}')
 print(f'Decision Tree F1 Score: {f1}')
 # Save F1 score and string name
-results['Decision Tree Classifier'] = {'accuracy': accuracy, 'f1_score': f1}
+time_diff = end_time - start_time
+results['Decision Tree Classifier'] = {'accuracy': accuracy, 'f1_score': f1, 'time': time_diff}
 
 
 # SUPPORT VECTOR MACHINE
 # 5 min run time
 '''
 # Train an SVM classifier with a linear kernel
+start_time = time.time()
 clf = SVC(kernel='linear', C=1, random_state=42)
 clf.fit(X_train_scaled, y_train)
 # Make predictions on the test set
@@ -141,24 +152,12 @@ y_pred = clf.predict(X_test_scaled)
 # Evaluate the performance of the classifier using accuracy and F1 score
 accuracy = accuracy_score(y_test, y_pred)
 f1 = f1_score(y_test, y_pred, average='weighted')
+end_time = time.time()
 print(f'SVM Accuracy: {accuracy}')
 print(f'SVM F1 Score: {f1}')
 # Save F1 score and string name
-results['SVM Classifier'] = {'accuracy': accuracy, 'f1_score': f1}
-'''
-
-
-'''
-clf.fit(X_train_scaled, y_train)
-# Make predictions on the test set
-y_pred = clf.predict(X_test_scaled)
-# Evaluate the performance of the classifier using accuracy and F1 score
-accuracy = accuracy_score(y_test, y_pred)
-f1 = f1_score(y_test, y_pred, average='weighted')
-print(f'SVM Accuracy: {accuracy}')
-print(f'SVM F1 Score: {f1}')
-# Save F1 score and string name
-results['SVM Classifier'] = {'accuracy': accuracy, 'f1_score': f1}
+time_diff = end_time - start_time
+results['SVM Classifier'] = {'accuracy': accuracy, 'f1_score': f1, 'time': time_diff}
 '''
 
 
@@ -180,6 +179,7 @@ print("Hyperparameter Tuning: ")
 print("TURN HYPERPARAMETER TUNING BACK ON")
 
 
+start_time = time.time()
 params = {
     'penalty': ['l1', 'l2', 'elasticnet'],
     'C': [0.001, 0.01, 0.1, 1, 10, 100],
@@ -202,17 +202,22 @@ y_pred = best_model.predict(X_test_scaled)
 # The best hyperparameters found by the search are printed along with the best score achieved during cross-validation.
 accuracy = accuracy_score(y_test, y_pred)
 f1 = f1_score(y_test, y_pred, average='weighted')
+end_time = time.time()
 print('Best parameters:', random_search.best_params_)
 print('Best score:', random_search.best_score_)
 print('Logistic Regression Accuracy score:', accuracy)
 print('Logistic Regression F1 score:', f1)
 # Save F1 score and string name
-results['Logistic Regression'] = {'accuracy': accuracy, 'f1_score': f1}
+time_diff = end_time - start_time
+results['Logistic Regression'] = {'accuracy': accuracy, 'f1_score': f1, 'time': time_diff}
 #print(random_search.cv_results_['mean_test_score'])
 mean_scores = random_search.cv_results_['mean_test_score']
 
+
+
+
 OurGraphs.plot_fold_mean(mean_scores)
-print("hello")
+
 # Print dictionary containing results
 for result in results:
      print(f'{result} : {results[result]}')
