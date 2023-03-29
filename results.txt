@@ -1,0 +1,18 @@
+Test Size : 0.2
+Random Forest F1 Score : {'accuracy': 0.5940296420581656, 'f1_score': 0.5001777627980217, 'time': 10.110142707824707}
+Gaussian Naive Bayes : {'accuracy': 0.5859899328859061, 'f1_score': 0.5290277568464501, 'time': 0.8631160259246826}
+Decision Tree Classifier : {'accuracy': 0.606753355704698, 'f1_score': 0.5096456026868375, 'time': 0.13534760475158691}
+
+
+Test Size : 0.25
+Random Forest F1 Score : {'accuracy': 0.5898769574944072, 'f1_score': 0.5097275576754393, 'time': 9.429085731506348}
+Gaussian Naive Bayes : {'accuracy': 0.5902125279642059, 'f1_score': 0.5326991576029593, 'time': 0.7860040664672852}
+Decision Tree Classifier : {'accuracy': 0.610178970917226, 'f1_score': 0.5272213933921277, 'time': 0.12847208976745605}
+
+
+Test Size : 0.3
+Random Forest F1 Score : {'accuracy': 0.5983407904548844, 'f1_score': 0.5084384296381796, 'time': 8.801015853881836}
+Gaussian Naive Bayes : {'accuracy': 0.5907904548844146, 'f1_score': 0.5330147245184157, 'time': 0.7458381652832031}
+Decision Tree Classifier : {'accuracy': 0.6102721849366145, 'f1_score': 0.5067695407654211, 'time': 0.12087130546569824}
+
+

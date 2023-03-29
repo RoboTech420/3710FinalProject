@@ -20,7 +20,7 @@ from scipy.stats import uniform
 import time
 
 # VARIABLES
-testSize = 0.25
+testSize = 0.3
 
 # FUNCTIONS
 # prints the columns
@@ -62,7 +62,7 @@ for column, encoder in label_encoders.items():
 X_set = df.drop(['readmitted'], axis=1)
 Y_set = df['readmitted']
 #Splits the dataset into training and testing sets using train_test_split function from scikit-learn
-X_train, X_test, y_train, y_test = train_test_split(X_set, Y_set, random_state=1)
+X_train, X_test, y_train, y_test = train_test_split(X_set, Y_set, test_size=testSize, random_state=1)
 
 # SCALING DATA
 # Create a StandardScaler object to scale the input features
@@ -89,6 +89,7 @@ print(f"F1 Score: {f1}")
 # Save F1 score and string name
 time_diff = end_time - start_time
 results['Random Forest F1 Score'] = {'accuracy': accuracy, 'f1_score': f1, 'time': time_diff}
+
 
 # GAUSSIAN NAIVE BAYES
 # Define a grid of hyperparameters to search over the smoothing parameter 'var_smoothing'.
@@ -122,6 +123,7 @@ time_diff = end_time - start_time
 results['Gaussian Naive Bayes'] = {'accuracy': accuracy, 'f1_score': f1, 'time': time_diff}
 
 
+
 # DECISION TREE CLASSIFIER
 # Implements a decision tree classifier on a given dataset and target column. It then splits the dataset into training and
 # testing sets, fits the classifier on the training data, and evaluates its performance on the testing data using the accuracy
@@ -138,7 +140,6 @@ print(f'Decision Tree F1 Score: {f1}')
 # Save F1 score and string name
 time_diff = end_time - start_time
 results['Decision Tree Classifier'] = {'accuracy': accuracy, 'f1_score': f1, 'time': time_diff}
-
 
 # SUPPORT VECTOR MACHINE
 # 5 min run time
@@ -178,7 +179,7 @@ results['SVM Classifier'] = {'accuracy': accuracy, 'f1_score': f1, 'time': time_
 print("Hyperparameter Tuning: ")
 print("TURN HYPERPARAMETER TUNING BACK ON")
 
-
+'''
 start_time = time.time()
 params = {
     'penalty': ['l1', 'l2', 'elasticnet'],
@@ -210,18 +211,23 @@ print('Logistic Regression F1 score:', f1)
 # Save F1 score and string name
 time_diff = end_time - start_time
 results['Logistic Regression'] = {'accuracy': accuracy, 'f1_score': f1, 'time': time_diff}
+
 #print(random_search.cv_results_['mean_test_score'])
 mean_scores = random_search.cv_results_['mean_test_score']
 
-
-
-
 OurGraphs.plot_fold_mean(mean_scores)
+'''
 
 # Print dictionary containing results
+with open('results.txt', 'a') as f:
+        f.write(f'Test Size : {testSize}\n')
 for result in results:
-     print(f'{result} : {results[result]}')
+    print(f'{result} : {results[result]}')
+    with open('results.txt', 'a') as f:
+        f.write(f'{result} : {results[result]}\n')
 
+with open('results.txt', 'a') as f:
+        f.write(f'\n\n')
 
 
 #DECODES DATASET
@@ -232,10 +238,9 @@ for column, encoder in label_encoders.items():
 
 
 # GRAPHS
+'''
 OurGraphs.plot_pie_chart(df)
 OurGraphs.plot_compare_f1_acc(results)
-
-'''
 OurGraphs.racemap(df)
 OurGraphs.plot_race_countplot(df)
 OurGraphs.plot_age_countplot(df)
