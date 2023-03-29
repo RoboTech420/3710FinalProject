@@ -35,6 +35,9 @@ df = ReadDataset.load_data()
 # DATA INFORMATION
 print(df.info())
 
+# Save F1 score and string name
+results = {}
+
 # ENCODES DATASET
 # Create a LabelEncoder object for each column and fit them on the respective column
 label_encoders = {}
@@ -73,10 +76,12 @@ X_test_scaled = scaler.transform(X_test)
 clf = RandomForestClassifier(n_estimators=100, random_state=42)
 clf.fit(X_train, y_train)
 y_pred = clf.predict(X_test_scaled)
-score = clf.score(X_test_scaled, y_test)
+accuracy = clf.score(X_test_scaled, y_test)
 f1 = f1_score(y_test, y_pred, average='weighted')
-print(f"Random Forest Classifier: {score}")
+print(f"Random Forest Classifier: {accuracy}")
 print(f"F1 Score: {f1}")
+# Save F1 score and string name
+results['Random Forest F1 Score'] = {'accuracy': accuracy, 'f1_score': f1}
 
 # GAUSSIAN NAIVE BAYES
 # Define a grid of hyperparameters to search over the smoothing parameter 'var_smoothing'.
@@ -103,6 +108,9 @@ accuracy = accuracy_score(y_test, y_model)
 f1 = f1_score(y_test, y_model, average='weighted')
 print(f"Gaussian Naive Bayes Accuracy score: {accuracy}")
 print(f"Gaussian Naive Bayes F1 score: {f1}")
+# Save F1 score and string name
+results['Gaussian Naive Bayes'] = {'accuracy': accuracy, 'f1_score': f1}
+
 
 # DECISION TREE CLASSIFIER
 # Implements a decision tree classifier on a given dataset and target column. It then splits the dataset into training and
@@ -115,6 +123,9 @@ accuracy = accuracy_score(y_test, y_pred)
 f1 = f1_score(y_test, y_pred, average='weighted')
 print(f'Decision Tree Accuracy: {accuracy}')
 print(f'Decision Tree F1 Score: {f1}')
+# Save F1 score and string name
+results['Decision Tree Classifier'] = {'accuracy': accuracy, 'f1_score': f1}
+
 
 # K-FOLD CROSS VALIDATION 
 # We are using logistic regression as the model to evaluate.
@@ -163,8 +174,11 @@ print('Logistic Regression Accuracy score:', accuracy)
 print('Logistic Regression F1 score:', f1)
 print('Logistic Regression F1_micro score:', f1_micro)
 print('Logistic Regression F1_macro score:', f1_macro)
+results['Logistic Regression'] = {'accuracy': accuracy, 'f1_score': f1}
 
-
+# Print dictionary containing results
+print('RESULTS\n')
+print(results)
 
 #DECODES DATASET
 # Decode the encoded values in each column and print the DataFrame with the decoded values
