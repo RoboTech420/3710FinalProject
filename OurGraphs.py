@@ -69,3 +69,22 @@ def plot_hospital_countplot(df):
     plt.legend(loc='upper right')
     plt.show()
 
+def plot_compare_f1_acc(results):
+    # Create a bar plot
+    fig, ax = plt.subplots()
+    models = list(results.keys())
+    accuracy = [val['accuracy'] for val in results.values()]
+    f1_score = [val['f1_score'] for val in results.values()]
+
+    bar_width = 0.35
+    x_pos = [i for i, _ in enumerate(models)]
+
+    plt.bar(x_pos, accuracy, color='b', width=bar_width, label='Accuracy')
+    plt.bar([i + bar_width for i in x_pos], f1_score, color='g', width=bar_width, label='F1 Score')
+
+    plt.xlabel("Models")
+    plt.ylabel("Scores")
+    plt.title("Comparison of F1 Score and Accuracy for Each Model")
+    plt.xticks([i + bar_width/2 for i in x_pos], models)
+    plt.legend()
+    plt.show()

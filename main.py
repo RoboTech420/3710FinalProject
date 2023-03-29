@@ -14,6 +14,7 @@ import OurGraphs
 from sklearn.model_selection import GridSearchCV
 from sklearn.model_selection import RandomizedSearchCV
 from sklearn.metrics import f1_score
+import matplotlib.pyplot as plt
 
 # VARIABLES
 testSize = 0.25
@@ -177,8 +178,10 @@ print('Logistic Regression F1_macro score:', f1_macro)
 results['Logistic Regression'] = {'accuracy': accuracy, 'f1_score': f1}
 
 # Print dictionary containing results
-print('RESULTS\n')
+print('RESULTS')
 print(results)
+
+
 
 #DECODES DATASET
 # Decode the encoded values in each column and print the DataFrame with the decoded values
@@ -186,7 +189,7 @@ for column, encoder in label_encoders.items():
     df[column] = encoder.inverse_transform(df[column])
 
 # GRAPHS
-
+OurGraphs.plot_compare_f1_acc(results)
 '''
 OurGraphs.racemap(df)
 OurGraphs.plot_race_countplot(df)
