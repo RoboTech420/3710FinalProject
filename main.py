@@ -173,8 +173,6 @@ print('Best parameters:', random_search.best_params_)
 print('Best score:', random_search.best_score_)
 print('Logistic Regression Accuracy score:', accuracy)
 print('Logistic Regression F1 score:', f1)
-print('Logistic Regression F1_micro score:', f1_micro)
-print('Logistic Regression F1_macro score:', f1_macro)
 results['Logistic Regression'] = {'accuracy': accuracy, 'f1_score': f1}
 
 # Print dictionary containing results
