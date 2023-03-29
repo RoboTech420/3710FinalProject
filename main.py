@@ -12,6 +12,8 @@ from sklearn.model_selection import cross_val_score
 import ReadDataset
 import OurGraphs
 from sklearn.model_selection import GridSearchCV
+from sklearn.model_selection import RandomizedSearchCV
+from sklearn.metrics import f1_score
 
 # VARIABLES
 testSize = 0.25
@@ -46,8 +48,7 @@ for column, encoder in label_encoders.items():
     df[column] = encoder.transform(df[column])
 
 # Heat Map
-
-OurGraphs.heatmap(df)
+#OurGraphs.heatmap(df)
 
 
 # Select the coloumn we want to train for
@@ -73,7 +74,9 @@ clf = RandomForestClassifier(n_estimators=100, random_state=42)
 clf.fit(X_train, y_train)
 y_pred = clf.predict(X_test_scaled)
 score = clf.score(X_test_scaled, y_test)
+f1 = f1_score(y_test, y_pred, average='weighted')
 print(f"Random Forest Classifier: {score}")
+print(f"F1 Score: {f1}")
 
 # GAUSSIAN NAIVE BAYES
 # Define a grid of hyperparameters to search over the smoothing parameter 'var_smoothing'.
@@ -95,9 +98,11 @@ print(f"Best hyperparameters: {grid.best_params_}")
 # predict on new data using the best model
 best_model = grid.best_estimator_
 y_model = best_model.predict(X_test_scaled)
-# print the accuracy score of the best model
-print(f"Gaussian Naive Bayes Accuracy score: {accuracy_score(y_test, y_model)}")
-
+# calculate and print the accuracy and F1 score of the best model
+accuracy = accuracy_score(y_test, y_model)
+f1 = f1_score(y_test, y_model, average='weighted')
+print(f"Gaussian Naive Bayes Accuracy score: {accuracy}")
+print(f"Gaussian Naive Bayes F1 score: {f1}")
 
 # DECISION TREE CLASSIFIER
 # Implements a decision tree classifier on a given dataset and target column. It then splits the dataset into training and
@@ -107,8 +112,9 @@ clf = DecisionTreeClassifier(max_depth=5, random_state=42)
 clf.fit(X_train_scaled, y_train)
 y_pred = clf.predict(X_test_scaled )
 accuracy = accuracy_score(y_test, y_pred)
-print(f'Decision Tree Accuracy : {accuracy}')
-
+f1 = f1_score(y_test, y_pred, average='weighted')
+print(f'Decision Tree Accuracy: {accuracy}')
+print(f'Decision Tree F1 Score: {f1}')
 
 # K-FOLD CROSS VALIDATION 
 # We are using logistic regression as the model to evaluate.
@@ -126,7 +132,7 @@ print(f'Decision Tree Accuracy : {accuracy}')
     # max_iter: maximum number of iterations taken for the solver to converge.
 print("Hyperparameter Tuning: ")
 print("TURN HYPERPARAMETER TUNING BACK ON")
-'''
+
 params = {
     'penalty': ['l1', 'l2', 'elasticnet'],
     'C': [0.001, 0.01, 0.1, 1, 10, 100],
@@ -139,14 +145,24 @@ params = {
 # The KFold function is used to split the data into k folds for cross-validation
 # The n_iter parameter of RandomizedSearchCV is set to 100, which means that 100 random combinations of hyperparameters will be tried.
 # n_jobs=-1 enables parallel processing using all available CPU cores.
-cv = KFold(n_splits=k, shuffle=True, random_state=42)
+cv = KFold(n_splits=4, shuffle=True, random_state=42)
 model = LogisticRegression()
 random_search = RandomizedSearchCV(model, param_distributions=params, cv=cv, n_iter=100, n_jobs=-1, random_state=42)
 random_search.fit(X_train_scaled, y_train)
+# predict on new data using the best model
+best_model = random_search.best_estimator_
+y_pred = best_model.predict(X_test_scaled)
 # The best hyperparameters found by the search are printed along with the best score achieved during cross-validation.
-print('Best parameters : ', random_search.best_params_)
-print('Best score : ', random_search.best_score_)
-'''
+accuracy = accuracy_score(y_test, y_pred)
+f1 = f1_score(y_test, y_pred, average='weighted')
+f1_micro = f1_score(y_test, y_pred, average='micro')
+f1_macro = f1_score(y_test, y_pred, average='macro')
+print('Best parameters:', random_search.best_params_)
+print('Best score:', random_search.best_score_)
+print('Logistic Regression Accuracy score:', accuracy)
+print('Logistic Regression F1 score:', f1)
+print('Logistic Regression F1_micro score:', f1_micro)
+print('Logistic Regression F1_macro score:', f1_macro)
 
 
 
@@ -157,9 +173,11 @@ for column, encoder in label_encoders.items():
 
 # GRAPHS
 
+'''
 OurGraphs.racemap(df)
 OurGraphs.plot_race_countplot(df)
 OurGraphs.plot_age_countplot(df)
 OurGraphs.plot_gender_countplot(df)
 OurGraphs.plot_diabetes_countplot(df)
 OurGraphs.plot_hospital_countplot(df)
+'''
