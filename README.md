@@ -39,3 +39,6 @@ run it by typing sh venv.sh
 ```pip install -r requirements.txt```
 
 
+# Run
+to run the code, simply execute the main.py file by using ``pythion main.py inside your terminal``` 
+
