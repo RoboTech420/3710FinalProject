@@ -40,5 +40,5 @@ run it by typing sh venv.sh
 
 
 # Run
-to run the code, simply execute the main.py file by using ```python main.py inside your terminal``` 
+to run the code, simply execute the main.py file by using ```python main.py```  inside your terminal
 
