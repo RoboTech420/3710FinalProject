@@ -20,7 +20,7 @@ from scipy.stats import uniform
 import time
 
 # VARIABLES
-testSize = 0.3
+testSize = 0.4
 
 # FUNCTIONS
 # prints the columns
@@ -143,7 +143,7 @@ results['Decision Tree Classifier'] = {'accuracy': accuracy, 'f1_score': f1, 'ti
 
 # SUPPORT VECTOR MACHINE
 # 5 min run time
-'''
+
 # Train an SVM classifier with a linear kernel
 start_time = time.time()
 clf = SVC(kernel='linear', C=1, random_state=42)
@@ -159,7 +159,7 @@ print(f'SVM F1 Score: {f1}')
 # Save F1 score and string name
 time_diff = end_time - start_time
 results['SVM Classifier'] = {'accuracy': accuracy, 'f1_score': f1, 'time': time_diff}
-'''
+
 
 
 # K-FOLD CROSS VALIDATION 
@@ -179,7 +179,7 @@ results['SVM Classifier'] = {'accuracy': accuracy, 'f1_score': f1, 'time': time_
 print("Hyperparameter Tuning: ")
 print("TURN HYPERPARAMETER TUNING BACK ON")
 
-'''
+
 start_time = time.time()
 params = {
     'penalty': ['l1', 'l2', 'elasticnet'],
@@ -216,7 +216,7 @@ results['Logistic Regression'] = {'accuracy': accuracy, 'f1_score': f1, 'time': 
 mean_scores = random_search.cv_results_['mean_test_score']
 
 OurGraphs.plot_fold_mean(mean_scores)
-'''
+
 
 # Print dictionary containing results
 with open('results.txt', 'a') as f:
