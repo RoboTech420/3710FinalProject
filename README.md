@@ -12,15 +12,6 @@ execute the following commands
 ```python -m venv <foldername>```
 (the new folder created will contain all the libraries)
 
-
-# Clone the repository
-
-```git clone https://github.com/RoboTech420/3710FinalProject```
-
-```cd 3710FinalProject```
-
-```pip install -r requirements.txt```
-
 to activate the virtual environment (<b>important step</b>) 
 this can be in the parent directory where both the folders are located.
 
@@ -39,5 +30,12 @@ and copy
 name it venv.sh
 run it by typing ./venv.sh or .\venv(?)
 
+# Clone the repository
+
+```git clone https://github.com/RoboTech420/3710FinalProject```
+
+```cd 3710FinalProject```
+
+```pip install -r requirements.txt```
 
 
