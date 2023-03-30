@@ -55,8 +55,7 @@ for column, encoder in label_encoders.items():
     df[column] = encoder.transform(df[column])
 
 # Heat Map
-#OurGraphs.heatmap(df)
-
+OurGraphs.heatmap(df)
 
 # Select the coloumn we want to train for
 X_set = df.drop(['readmitted'], axis=1)
@@ -70,7 +69,6 @@ scaler = StandardScaler()
 # Fit the scaler on the training set and transform both the training and test sets
 X_train_scaled = scaler.fit_transform(X_train)
 X_test_scaled = scaler.transform(X_test)
-
 
 
 # RANDOM FOREST CLASSIFIER
@@ -141,9 +139,8 @@ print(f'Decision Tree F1 Score: {f1}')
 time_diff = end_time - start_time
 results['Decision Tree Classifier'] = {'accuracy': accuracy, 'f1_score': f1, 'time': time_diff}
 
-# SUPPORT VECTOR MACHINE
-# 5 min run time
 
+# SUPPORT VECTOR MACHINE
 # Train an SVM classifier with a linear kernel
 start_time = time.time()
 clf = SVC(kernel='linear', C=1, random_state=42)
@@ -161,7 +158,6 @@ time_diff = end_time - start_time
 results['SVM Classifier'] = {'accuracy': accuracy, 'f1_score': f1, 'time': time_diff}
 
 
-
 # K-FOLD CROSS VALIDATION 
 # We are using logistic regression as the model to evaluate.
 # The cross_val_score function will return an array of accuracy scores for each fold. You can then compute the mean and
@@ -177,9 +173,6 @@ results['SVM Classifier'] = {'accuracy': accuracy, 'f1_score': f1, 'time': time_
     # solver: algorithm to be used for optimization.
     # max_iter: maximum number of iterations taken for the solver to converge.
 print("Hyperparameter Tuning: ")
-print("TURN HYPERPARAMETER TUNING BACK ON")
-
-
 start_time = time.time()
 params = {
     'penalty': ['l1', 'l2', 'elasticnet'],
@@ -218,7 +211,7 @@ mean_scores = random_search.cv_results_['mean_test_score']
 OurGraphs.plot_fold_mean(mean_scores)
 
 
-# Print dictionary containing results
+# Print dictionary containing results to a file
 with open('results.txt', 'a') as f:
         f.write(f'Test Size : {testSize}\n')
 for result in results:
@@ -236,9 +229,7 @@ for column, encoder in label_encoders.items():
     df[column] = encoder.inverse_transform(df[column])
 
 
-
 # GRAPHS
-'''
 OurGraphs.plot_pie_chart(df)
 OurGraphs.plot_compare_f1_acc(results)
 OurGraphs.racemap(df)
@@ -247,4 +238,3 @@ OurGraphs.plot_age_countplot(df)
 OurGraphs.plot_gender_countplot(df)
 OurGraphs.plot_diabetes_countplot(df)
 OurGraphs.plot_hospital_countplot(df)
-'''
