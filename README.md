@@ -28,7 +28,7 @@ and copy
 
   
 name it venv.sh
-run it by typing ./venv.sh or .\venv(?)
+run it by typing ./venv.sh or .\venv
 
 # Clone the repository
 
